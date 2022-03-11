@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => NULL,
+        'name' => 'typedb/client-php',
+        'dev' => true,
+    ),
+    'versions' => array(
+        'google/protobuf' => array(
+            'pretty_version' => 'v3.19.4',
+            'version' => '3.19.4.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../google/protobuf',
+            'aliases' => array(),
+            'reference' => '6f0a54186f133aff98f49d0f36a32d4a4f7d4cbd',
+            'dev_requirement' => false,
+        ),
+        'grpc/grpc' => array(
+            'pretty_version' => '1.42.0',
+            'version' => '1.42.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../grpc/grpc',
+            'aliases' => array(),
+            'reference' => '9fa44f104cb92e924d4da547323a97f3d8aca6d4',
+            'dev_requirement' => false,
+        ),
+        'typedb/client-php' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => NULL,
+            'dev_requirement' => false,
+        ),
+    ),
+);

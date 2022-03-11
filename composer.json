@@ -1,0 +1,15 @@
+{
+  "name": "typedb/client-php",
+  "description": "Implementation of typedb-client-php",
+  "require": {
+    "grpc/grpc": "^v1.39.0",
+    "google/protobuf": "^v3.12.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "TypeDb\\": "TypeDb/",
+      "Typedb\\": "TypeDb/Typedb/",
+      "GPBMetadata\\": ["TypeDb/GPBMetadata/"]
+    }
+  }
+}
