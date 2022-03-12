@@ -22,11 +22,11 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Thing;
 
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DoubleType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DateTimeType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\Double;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DateTime;
 use TypeDb\Client\Api\Concept\Remote\Thing\Thing;
 use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\BooleanType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\LongType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\Long;
 use TypeDb\Client\Api\Concept\Remote\Type\ThingType;
 use TypeDb\Client\Api\Concept\Thing\Attribute as AttributeLocal;
 
@@ -42,12 +42,12 @@ interface Attribute extends Thing, AttributeLocal
 
     public function asBoolean(): BooleanType;
 
-    public function asLong(): LongType;
+    public function asLong(): Long;
 
-    public function asDouble(): DoubleType;
+    public function asDouble(): Double;
 
     public function asstring(): string;
 
-    public function asDateTime(): DateTimeType;
+    public function asDateTime(): DateTime;
 
 }

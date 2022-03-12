@@ -17,7 +17,7 @@ interface BooleanType extends AttributeType, BooleanTypeLocal
 
     public function getSubtypes(); //stream
 
-    public function setSupertype(AttributeType $boolAttributeType): void;
+    public function setSupertype(BooleanTypeLocal $attributeType): void;
 
 
 }

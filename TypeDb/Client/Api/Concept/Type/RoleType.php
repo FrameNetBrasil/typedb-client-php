@@ -23,32 +23,14 @@
 namespace TypeDb\Client\Api\Concept\Type;
 
 use TypeDb\Client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Remote\Type\RoleType as RoleTypeRemote;
 
-interface RoleType extends Type{
 
-    
-    default bool isRoleType() {
-        return true;
-    }
+interface RoleType extends Type {
 
     
-    RoleType.Remote asRemote(TypeDBTransaction transaction);
+    public function isRoleType(): bool;
 
-    interface Remote extends Type.Remote, RoleType {
+    public function asRemote(TypeDBTransaction $transaction): RoleTypeRemote;
 
-        
-        RoleType getSupertype();
-
-        
-        Stream<? extends RoleType> getSupertypes();
-
-        
-        Stream<? extends RoleType> getSubtypes();
-
-        RelationType getRelationType();
-
-        Stream<? extends RelationType> getRelationTypes();
-
-        Stream<? extends ThingType> getPlayers();
-    }
 }

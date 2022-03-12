@@ -20,36 +20,25 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Type\AttributeType;
+
+namespace TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
 
 use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Type\Boolean;
-use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
+use TypeDb\Client\Api\Concept\Type\DateTime;
+use TypeDb\Client\Api\Concept\Type\AttributeType\DateTimeType as DateTimeTypeLocal;
 
-
-interface DateTimeType extends AttributeType, BooleanTypeLocal
+interface DateTimeType extends AttributeType, DateTimeTypeLocal
 {
 
-    public function isDateTime(): bool;
+    public function put(bool $value): DateTime;
 
-    public function getType(): AttributeType;
+    public function get(bool $value): DateTime;
 
-    public function asRemote(TypeDBTransaction $transaction): DateTimeTypeRemote;
-Attribute.DateTime put(LocalDateTime value);
+    public function getInstances(); //stream
 
+    public function getSubtypes(); //stream
 
-
-Attribute.DateTime get(LocalDateTime value);
-
-
-
-Stream<? extends Attribute.DateTime> getInstances();
-
-
-
-Stream<? extends AttributeType.DateTime> getSubtypes();
-
-void setSupertype(AttributeType.DateTime dateTimeAttributeType);
+    public function setSupertype(DateTimeTypeLocal $boolAttributeType): void;
 
 
 }

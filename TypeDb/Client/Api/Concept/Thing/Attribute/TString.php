@@ -25,7 +25,7 @@ namespace TypeDb\Client\Api\Concept\Thing\Attribute;
 use TypeDb\Client\Api\TypeDBTransaction;
 use TypeDb\Client\Api\Concept\Thing\Attribute;
 use TypeDb\Client\Api\Concept\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\TStringType as TStringRemote;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\TString as TStringRemote;
 
 
 interface TString extends Attribute

@@ -22,35 +22,21 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Type;
 
-use TypeDb\Client.api.TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Type\RelationType;
+use TypeDb\Client\Api\Concept\Type\RoleType as RoleTypeLocal;
 
-import java.util.stream.Stream;
+interface RoleType extends ThingType, RoleTypeLocal {
 
-public function RoleType extends Type : interface{
+    public function getSupertype(): RoleType ;
 
-    
-    default bool isRoleType() {
-        return true;
-    }
+    public function getSupertypes(); //stream
 
-    
-    RoleType.Remote asRemote(TypeDBTransaction transaction);
+    public function getSubtypes(); //stream
 
-    interface Remote extends Type.Remote, RoleType {
+    public function getRelationType(): RelationType;
 
-        
-        RoleType getSupertype();
+    public function getRelationTypes(); //stream
 
-        
-        Stream<? extends RoleType> getSupertypes();
+    public function getPlayers(); //stream
 
-        
-        Stream<? extends RoleType> getSubtypes();
-
-        RelationType getRelationType();
-
-        Stream<? extends RelationType> getRelationTypes();
-
-        Stream<? extends ThingType> getPlayers();
-    }
 }

@@ -22,8 +22,8 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Thing\Attribute;
 
-use TypeDb\Client\Api\Concept\Thing\Attribute\DateTimeType as DateTimeLocal;
+use TypeDb\Client\Api\Concept\Thing\Attribute\DateTime as DateTimeLocal;
 
-interface DateTimeType extends DateTimeLocal {
+interface DateTime extends DateTimeLocal {
 
 }

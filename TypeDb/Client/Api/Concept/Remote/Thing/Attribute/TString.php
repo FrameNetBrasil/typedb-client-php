@@ -20,37 +20,10 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Type;
+namespace TypeDb\Client\Api\Concept\Remote\Thing\Attribute;
 
-use TypeDb\Client.api.TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Thing\Attribute\TString as TStringLocal;
 
-import java.util.stream.Stream;
+interface TString extends TStringLocal {
 
-public function RoleType extends Type : interface{
-
-    
-    default bool isRoleType() {
-        return true;
-    }
-
-    
-    RoleType.Remote asRemote(TypeDBTransaction transaction);
-
-    interface Remote extends Type.Remote, RoleType {
-
-        
-        RoleType getSupertype();
-
-        
-        Stream<? extends RoleType> getSupertypes();
-
-        
-        Stream<? extends RoleType> getSubtypes();
-
-        RelationType getRelationType();
-
-        Stream<? extends RelationType> getRelationTypes();
-
-        Stream<? extends ThingType> getPlayers();
-    }
 }

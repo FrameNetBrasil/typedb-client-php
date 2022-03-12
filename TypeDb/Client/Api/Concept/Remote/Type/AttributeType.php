@@ -22,18 +22,19 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Type;
 
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\BooleanType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DateTimeType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\LongType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\TStringType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\BooleanType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\DateTimeType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\DoubleType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\LongType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\TStringType;
+
 use TypeDb\Client\Api\Concept\Type\AttributeType as AttributeTypeLocal;
 
 
 interface AttributeType extends AttributeTypeLocal, ThingType
 {
 
-
-    public function setSupertype(AttributeType $attributeType): void;
+    public function setSupertype(AttributeTypeLocal $attributeType): void;
 
     public function getSubtypes(); //stream
 

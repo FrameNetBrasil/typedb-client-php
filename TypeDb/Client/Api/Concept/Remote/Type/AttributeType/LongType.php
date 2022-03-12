@@ -1,34 +1,24 @@
 <?php
 
-namespace TypeDb\Client\Api\Concept\Type\AttributeType;
+
+namespace TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
 
 use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Type\Boolean;
-use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
+use TypeDb\Client\Api\Concept\Type\Long;
+use TypeDb\Client\Api\Concept\Type\AttributeType\LongType as LongTypeLocal;
 
-
-interface LongType extends AttributeType, BooleanTypeLocal
+interface LongType extends AttributeType, LongTypeLocal
 {
 
-    public function isLong(): bool;
+    public function put(bool $value): Long;
 
-    public function getType(): AttributeType;
+    public function get(bool $value): Long;
 
-    public function asRemote(TypeDBTransaction $transaction): LongTypeRemote;
+    public function getInstances(); //stream
 
-Attribute.Long put(long value);
+    public function getSubtypes(); //stream
 
-
-
-Attribute.Long get(long value);
+    public function setSupertype(LongTypeLocal $boolAttributeType): void;
 
 
-
-Stream<? extends Attribute.Long> getInstances();
-
-
-
-Stream<? extends AttributeType.Long> getSubtypes();
-
-void setSupertype(AttributeType.Long longAttributeType);
 }

@@ -1,35 +1,24 @@
 <?php
 
-namespace TypeDb\Client\Api\Concept\Type\AttributeType;
+
+namespace TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
 
 use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Type\Boolean;
-use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
+use TypeDb\Client\Api\Concept\Type\Double;
+use TypeDb\Client\Api\Concept\Type\AttributeType\DoubleType as DoubleTypeLocal;
 
-interface DoubleType extends AttributeType, BooleanTypeLocal
+interface DoubleType extends AttributeType, DoubleTypeLocal
 {
 
-    public function isDouble(): bool;
+    public function put(bool $value): Double;
 
-    public function getType(): AttributeType;
+    public function get(bool $value): Double;
 
-    public function asRemote(TypeDBTransaction $transaction): DoubleTypeemote;
+    public function getInstances(); //stream
 
-Attribute.Double put(double value);
+    public function getSubtypes(); //stream
 
-
-
-Attribute.Double get(double value);
-
-
-
-Stream<? extends Attribute.Double> getInstances();
-
-
-
-Stream<? extends AttributeType.Double> getSubtypes();
-
-void setSupertype(AttributeType.Double doubleAttributeType);
+    public function setSupertype(DoubleTypeLocal $boolAttributeType): void;
 
 
 }

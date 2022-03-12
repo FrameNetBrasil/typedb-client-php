@@ -23,44 +23,13 @@
 namespace TypeDb\Client\Api\Concept\Type;
 
 use TypeDb\Client\Api\TypeDBTransaction;
-use TypeDb\Client\Api\Concept\Thing\Relation;
+use TypeDb\Client\Api\Concept\Remote\Type\RelationType as RelationTypeRemote;
 
-interface RelationType extends ThingType{
+interface RelationType extends ThingType
+{
 
-    
-    default bool isRelationType() {
-        return true;
-    }
+    public function isRelationType(): bool;
 
-    
-    RelationType.Remote asRemote(TypeDBTransaction transaction);
+    public function asRemote(TypeDBTransaction $transaction): RelationTypeRemote;
 
-    interface Remote extends ThingType.Remote, RelationType {
-
-        
-        Relation create();
-
-        
-        
-        Stream<? extends Relation> getInstances();
-
-        
-        Stream<? extends RoleType> getRelates();
-
-        
-        
-        RoleType getRelates(string roleLabel);
-
-        void setRelates(string roleLabel);
-
-        void setRelates(string roleLabel, string overriddenLabel);
-
-        void unsetRelates(string roleLabel);
-
-        
-        
-        Stream<? extends RelationType> getSubtypes();
-
-        void setSupertype(RelationType superRelationType);
-    }
 }

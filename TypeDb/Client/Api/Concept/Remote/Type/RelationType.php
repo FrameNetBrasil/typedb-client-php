@@ -22,49 +22,27 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Type;
 
-use TypeDb\Client.api.TypeDBTransaction;
-use TypeDb\Client.api.concept.thing.Relation;
+use TypeDb\Client\Api\Concept\Thing\Relation;
+use TypeDb\Client\Api\Concept\Type\RoleType;
+use TypeDb\Client\Api\Concept\Type\RelationType as RelationTypeLocal;
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import java.util.stream.Stream;
 
-public function RelationType extends ThingType : interface{
+interface RelationType extends ThingType, RelationTypeLocal {
 
-    
-    default bool isRelationType() {
-        return true;
-    }
+    public function create(): Relation;
 
-    
-    RelationType.Remote asRemote(TypeDBTransaction transaction);
+    public function getInstances(); // stream
 
-    interface Remote extends ThingType.Remote, RelationType {
+    public function getRelates(); // stream
 
-        
-        Relation create();
+    public function getRelatesRole(?string $roleLabel): RoleType;
 
-        
-        
-        Stream<? extends Relation> getInstances();
+    public function setRelates(string $roleLabel, ?string $overriddenLabel);
 
-        
-        Stream<? extends RoleType> getRelates();
+    public function unsetRelates(string $roleLabel): void;
 
-        
-        
-        RoleType getRelates(string roleLabel);
+    public function getSubtypes(); // stream
 
-        void setRelates(string roleLabel);
+    public function setSupertype(RelationTypeLocal $superRelationType): void;
 
-        void setRelates(string roleLabel, string overriddenLabel);
-
-        void unsetRelates(string roleLabel);
-
-        
-        
-        Stream<? extends RelationType> getSubtypes();
-
-        void setSupertype(RelationType superRelationType);
-    }
 }

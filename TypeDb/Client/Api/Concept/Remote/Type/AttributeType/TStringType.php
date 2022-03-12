@@ -20,40 +20,25 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Type\AttributeType;
+
+namespace TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
 
 use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Type\Boolean;
-use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
+use TypeDb\Client\Api\Concept\Type\TString;
+use TypeDb\Client\Api\Concept\Type\AttributeType\TStringType as TStringTypeLocal;
 
-interface TStringType extends AttributeType, BooleanTypeLocal
+interface TStringType extends AttributeType, TStringTypeLocal
 {
-    public function isString(): bool;
 
-    public function getType(): AttributeType;
+    public function put(bool $value): TString;
 
-    public function asRemote(TypeDBTransaction $transaction): TStringTypeRemote;
+    public function get(bool $value): TString;
 
-Attribute.string put(java.lang.string value);
+    public function getInstances(); //stream
 
+    public function getSubtypes(); //stream
 
+    public function setSupertype(TStringTypeLocal $boolAttributeType): void;
 
-Attribute.string get(java.lang.string value);
-
-
-
-Stream<? extends Attribute.string> getInstances();
-
-
-
-java.lang.string getRegex();
-
-void setRegex(java.lang.string regex);
-
-
-
-Stream<? extends AttributeType.string> getSubtypes();
-
-void setSupertype(AttributeType.string stringAttributeType);
 
 }
