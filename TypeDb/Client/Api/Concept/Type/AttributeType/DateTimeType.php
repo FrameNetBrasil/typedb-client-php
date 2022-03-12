@@ -20,24 +20,21 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Thing;
+namespace TypeDb\Client\Api\Concept\Type\AttributeType;
 
-interface string extends Attribute<java.lang.string> {
-
-
-
-default bool isstring() {
-            return true;
-        }
+use TypeDb\Client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Thing\Attribute;
+use TypeDb\Client\Api\Concept\Type\AttributeType;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\DateTimeType as DateTimeTypeRemote;
 
 
+interface DateTimeType extends AttributeType
+{
 
-        AttributeType.string getType();
+    public function isDateTime(): bool;
 
+    public function getType(): AttributeType;
 
+    public function asRemote(TypeDBTransaction $transaction): DateTimeTypeRemote;
 
-        Attribute.string.Remote asRemote(TypeDBTransaction transaction);
-
-        interface Remote extends Attribute.string, Attribute.Remote<java.lang.string> {
-    }
-    }
+}

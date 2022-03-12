@@ -20,24 +20,19 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Thing;
+namespace TypeDb\Client\Api\Concept\Thing\Attribute;
 
-interface DateTime extends Attribute<LocalDateTime> {
-
-
-
-default bool isDateTime() {
-            return true;
-        }
+use TypeDb\Client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Thing\Attribute;
+use TypeDb\Client\Api\Concept\Type\AttributeType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\TStringType as TStringRemote;
 
 
+interface TString extends Attribute
+{
+    public function isString(): bool;
 
-        AttributeType.DateTime getType();
+    public function getType(): AttributeType;
 
-
-
-        Attribute.DateTime.Remote asRemote(TypeDBTransaction transaction);
-
-        interface Remote extends Attribute.DateTime, Attribute.Remote<LocalDateTime> {
-    }
-    }
+    public function asRemote(TypeDBTransaction $transaction): TStringRemote;
+}

@@ -24,33 +24,12 @@ namespace TypeDb\Client\Api\Concept\Type;
 
 use TypeDb\Client\Api\TypeDBTransaction;
 use TypeDb\Client\Api\Concept\Thing\Entity;
+use TypeDb\Client\Api\Concept\Remote\Type\EntityType as EntityRemote;
 
+interface EntityType extends ThingType
+{
 
-interface EntityType extends ThingType{
+    public function isEntityType(): void;
 
-    
-    
-    default bool isEntityType() {
-        return true;
-    }
-
-    
-    
-    EntityType.Remote asRemote(TypeDBTransaction transaction);
-
-    interface Remote extends ThingType.Remote, EntityType {
-
-        
-        Entity create();
-
-        
-        
-        Stream<? extends Entity> getInstances();
-
-        
-        
-        Stream<? extends EntityType> getSubtypes();
-
-        void setSupertype(EntityType superEntityType);
-    }
+    public function asRemote(TypeDBTransaction $transaction): EntityTypeRemote;
 }

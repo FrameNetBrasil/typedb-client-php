@@ -20,20 +20,36 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Remote\Type;
+namespace TypeDb\Client\Api\Concept\Type\AttributeType;
 
-use TypeDb\Client\Api\Concept\Remote\Type\ThingType as ThingType;
-use TypeDb\Client\Api\Concept\Thing\Entity;
-use TypeDb\Client\Api\Concept\Type\EntityType as EntityTypeLocal;
-
-interface EntityType extends ThingType, EntityTypeLocal{
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
+use TypeDb\Client\Api\Concept\Type\Boolean;
+use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
 
 
-        public function create(): Entity;
+interface DateTimeType extends AttributeType, BooleanTypeLocal
+{
 
-        public function getInstances(); //stream
+    public function isDateTime(): bool;
 
-        public function getSubtypes(); //stream
+    public function getType(): AttributeType;
 
-        public function setSupertype(EntityType $superEntityType): void;
+    public function asRemote(TypeDBTransaction $transaction): DateTimeTypeRemote;
+Attribute.DateTime put(LocalDateTime value);
+
+
+
+Attribute.DateTime get(LocalDateTime value);
+
+
+
+Stream<? extends Attribute.DateTime> getInstances();
+
+
+
+Stream<? extends AttributeType.DateTime> getSubtypes();
+
+void setSupertype(AttributeType.DateTime dateTimeAttributeType);
+
+
 }

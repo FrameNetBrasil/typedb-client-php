@@ -20,39 +20,10 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Type;
+namespace TypeDb\Client\Api\Concept\Remote\Thing\Attribute;
 
-use TypeDb\Client.api.TypeDBTransaction;
-use TypeDb\Client.api.concept.thing.Entity;
+use TypeDb\Client\Api\Concept\Thing\Attribute\TStringType as TStringLocal;
 
-import javax.annotation.CheckReturnValue;
-import java.util.stream.Stream;
+interface TStringType extends TStringLocal {
 
-public function EntityType extends ThingType : interface{
-
-    
-    
-    default bool isEntityType() {
-        return true;
-    }
-
-    
-    
-    EntityType.Remote asRemote(TypeDBTransaction transaction);
-
-    interface Remote extends ThingType.Remote, EntityType {
-
-        
-        Entity create();
-
-        
-        
-        Stream<? extends Entity> getInstances();
-
-        
-        
-        Stream<? extends EntityType> getSubtypes();
-
-        void setSupertype(EntityType superEntityType);
-    }
 }

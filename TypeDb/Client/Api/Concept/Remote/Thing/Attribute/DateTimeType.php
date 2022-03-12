@@ -22,22 +22,8 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Thing\Attribute;
 
-interface DateTime extends Attribute<LocalDateTime> {
+use TypeDb\Client\Api\Concept\Thing\Attribute\DateTimeType as DateTimeLocal;
 
+interface DateTimeType extends DateTimeLocal {
 
-
-default bool isDateTime() {
-            return true;
-        }
-
-
-
-        AttributeType.DateTime getType();
-
-
-
-        Attribute.DateTime.Remote asRemote(TypeDBTransaction transaction);
-
-        interface Remote extends Attribute.DateTime, Attribute.Remote<LocalDateTime> {
-    }
-    }
+}

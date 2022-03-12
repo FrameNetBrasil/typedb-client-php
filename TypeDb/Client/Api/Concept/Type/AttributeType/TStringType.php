@@ -20,53 +20,19 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Thing;
+namespace TypeDb\Client\Api\Concept\Type\AttributeType;
 
-use TypeDb\Client\Api\Concept\Thing\Attribute\BooleanType;
-use TypeDb\Client\Api\Concept\Thing\Attribute\DateTimeType;
-use TypeDb\Client\Api\Concept\Thing\Attribute\DoubleType;
-use TypeDb\Client\Api\Concept\Thing\Attribute\LongType;
 use TypeDb\Client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\Concept\Thing\Attribute;
 use TypeDb\Client\Api\Concept\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Remote\Thing\Attribute as AttributeRemote;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType\TStringType as TStringTypeRemote;
 
 
-interface Attribute extends Thing
+interface TStringType extends AttributeType
 {
+    public function isString(): bool;
 
     public function getType(): AttributeType;
 
-
-    public function getValue();
-
-
-    public function isAttribute(): bool;
-
-    public function isBoolean(): bool;
-
-    public function isLong(): bool;
-
-    public function isDouble(): bool;
-
-    public function isstring(): bool;
-
-    public function isDateTime(): bool;
-
-
-    public function asBoolean(): BooleanType;
-
-
-    public function asLong(): LongType;
-
-
-    public function asDouble(): DoubleType;
-
-
-    public function asstring(): string;
-
-
-    public function asDateTime(): DateTimeType;
-
-
-    public function asRemote(TypeDBTransaction $transaction): AttributeRemote;
+    public function asRemote(TypeDBTransaction $transaction): TStringTypeRemote;
 }

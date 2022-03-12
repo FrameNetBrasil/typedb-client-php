@@ -22,40 +22,32 @@
 
 namespace TypeDb\Client\Api\Concept\Remote\Thing;
 
-use TypeDb\Client\Api\TypeDBTransaction;
-use TypeDb\Client\Api\Concept\Type\AttributeType;
-use TypeDb\Client\Api\Concept\Type\ThingType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DoubleType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\DateTimeType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Thing;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\BooleanType;
+use TypeDb\Client\Api\Concept\Remote\Thing\Attribute\LongType;
+use TypeDb\Client\Api\Concept\Remote\Type\ThingType;
+use TypeDb\Client\Api\Concept\Thing\Attribute as AttributeLocal;
 
-interface Attribute extends Thing {
-
-
-Stream<? extends Thing> getOwners();
-
-
-Stream<? extends Thing> getOwners(ThingType ownerType);
-
+interface Attribute extends Thing, AttributeLocal
+{
 
 
-Attribute.Remote<VALUE> asAttribute();
+    //public function getOwners();//stream
 
+    public function getOwners(?ThingType $ownerType); //stream
 
+    public function asAttribute(): Attribute;
 
-Attribute.Boolean.Remote asBoolean();
+    public function asBoolean(): BooleanType;
 
+    public function asLong(): LongType;
 
+    public function asDouble(): DoubleType;
 
-Attribute.Long.Remote asLong();
+    public function asstring(): string;
 
-
-
-Attribute.Double.Remote asDouble();
-
-
-
-Attribute.string.Remote asstring();
-
-
-
-Attribute.DateTime.Remote asDateTime();
+    public function asDateTime(): DateTimeType;
 
 }

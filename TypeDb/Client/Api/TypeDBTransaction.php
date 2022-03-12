@@ -22,16 +22,13 @@
 
 namespace TypeDb\client\Api;
 
-use TypeDb\Client.api.concept.ConceptManager;
-use TypeDb\Client.api.logic.LogicManager;
-use TypeDb\Client.api.query.QueryFuture;
-use TypeDb\Client.api.query.QueryManager;
+use TypeDb\Client\Api\Concept\ConceptManager;
+use TypeDb\Client\Api\Logic\LogicManager;
+use TypeDb\Client\Api\Query\QueryFuture;
+use TypeDb\Client\Api\Query\QueryManager;
 use Typedb\Protocol\TransactionProto;
 
-import javax.annotation.CheckReturnValue;
-import java.util.stream.Stream;
-
-public function TypeDBTransaction extends AutoCloseable : interface{
+interface TypeDBTransaction {
 
     
     bool isOpen();

@@ -20,20 +20,40 @@
  * under the License.
  */
 
-namespace TypeDb\Client\Api\Concept\Remote\Type;
+namespace TypeDb\Client\Api\Concept\Type\AttributeType;
 
-use TypeDb\Client\Api\Concept\Remote\Type\ThingType as ThingType;
-use TypeDb\Client\Api\Concept\Thing\Entity;
-use TypeDb\Client\Api\Concept\Type\EntityType as EntityTypeLocal;
+use TypeDb\Client\Api\Concept\Remote\Type\AttributeType;
+use TypeDb\Client\Api\Concept\Type\Boolean;
+use TypeDb\Client\Api\Concept\Type\AttributeType\BooleanType as BooleanTypeLocal;
 
-interface EntityType extends ThingType, EntityTypeLocal{
+interface TStringType extends AttributeType, BooleanTypeLocal
+{
+    public function isString(): bool;
+
+    public function getType(): AttributeType;
+
+    public function asRemote(TypeDBTransaction $transaction): TStringTypeRemote;
+
+Attribute.string put(java.lang.string value);
 
 
-        public function create(): Entity;
 
-        public function getInstances(); //stream
+Attribute.string get(java.lang.string value);
 
-        public function getSubtypes(); //stream
 
-        public function setSupertype(EntityType $superEntityType): void;
+
+Stream<? extends Attribute.string> getInstances();
+
+
+
+java.lang.string getRegex();
+
+void setRegex(java.lang.string regex);
+
+
+
+Stream<? extends AttributeType.string> getSubtypes();
+
+void setSupertype(AttributeType.string stringAttributeType);
+
 }

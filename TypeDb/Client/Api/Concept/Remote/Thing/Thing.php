@@ -41,7 +41,7 @@ interface Thing extends Concept, ThingLocal
     public function getHas(bool $onlyKey); //stream
 
 
-    Stream<? extends Attribute.Boolean> getHas(AttributeType.Boolean attributeType);
+    Stream<? extends Attribute.BooleanType> getHas(AttributeType.BooleanType attributeType);
 
 
 Stream<? extends Attribute.Long> getHas(AttributeType.Long attributeType);
