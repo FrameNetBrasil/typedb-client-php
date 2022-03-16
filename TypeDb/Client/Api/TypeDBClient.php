@@ -20,42 +20,24 @@
  * under the License.
  */
 
-namespace TypeDb\client\Api;
+namespace TypeDb\Client\Api;
 
-use TypeDb\Client.api.database.DatabaseManager;
-use TypeDb\Client.api.user.UserManager;
+use TypeDb\Client\Api\Database\DatabaseManager;
 
-import javax.annotation.CheckReturnValue;
+interface TypeDBClient {
 
-public function TypeDBClient extends AutoCloseable : interface{
 
-    
-    bool isOpen();
+    public function isOpen(): bool;
 
-    
-    DatabaseManager databases();
+    public function databases(): DatabaseManager;
 
-    
-    TypeDBSession session(string database, TypeDBSession.Type type);
+    public function session(string $database, TypeDBSessionType $type, ?TypeDBOptions $options): TypeDBSession ;
 
-    
-    TypeDBSession session(string database, TypeDBSession.Type type, TypeDBOptions options);
+    public function isCluster(): bool;
 
-    
-    bool isCluster();
+    public function asCluster(): TypeDBCluster ;
 
-    
-    TypeDBClient.Cluster asCluster();
+    public function close(): void;
 
-    void close();
 
-    interface Cluster extends TypeDBClient {
-
-        
-        UserManager users();
-
-        
-        
-        DatabaseManager.Cluster databases();
-    }
 }

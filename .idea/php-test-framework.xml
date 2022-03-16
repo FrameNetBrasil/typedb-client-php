@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpTestFrameworkSettings">
+    <test_tools>
+      <tool tool_name="Behat">
+        <settings>
+          <configurations>
+            <local_configuration executable_path="$PROJECT_DIR$/vendor/behat/behat/bin/behat" />
+            <configuration_by_sdk interpreter_id="9b89715c-12c3-4de7-9bec-c762a6ccdb07" executable_path="/home/ematos/devel/php/typedb-client-php/vendor/behat/behat/bin/behat" />
+          </configurations>
+        </settings>
+      </tool>
+    </test_tools>
+  </component>
+  <component name="PhpTestFrameworkVersionCache">
+    <tools_cache>
+      <tool tool_name="Behat">
+        <cache>
+          <versions>
+            <info id="Local" version="Behat version can't be detected. Default PHP interpreter is not local" />
+            <info id="interpreter-9b89715c-12c3-4de7-9bec-c762a6ccdb07" version="3.8.1" />
+          </versions>
+        </cache>
+      </tool>
+      <tool tool_name="PHPUnit">
+        <cache>
+          <versions>
+            <info id="Local" version="PHPUnit version can't be detected. Default PHP interpreter is not local" />
+          </versions>
+        </cache>
+      </tool>
+    </tools_cache>
+  </component>
+</project>

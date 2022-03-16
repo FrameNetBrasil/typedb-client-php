@@ -22,14 +22,11 @@
 
 namespace TypeDb\Client\Api\User;
 
-import javax.annotation.CheckReturnValue;
+interface User {
 
-public function User : interface{
+    public function username(): string;
 
-    
-    string username();
+    public function password(string $password): void;
 
-    void password(string password);
-
-    void delete();
+    public function delete(): void;
 }

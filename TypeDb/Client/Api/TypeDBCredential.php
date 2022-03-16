@@ -20,49 +20,30 @@
  * under the License.
  */
 
-namespace TypeDb\client\Api;
-
-import javax.annotation.Nullable;
-import java.nio.file.Path;
-import java.util.Optional;
+namespace TypeDb\Client\Api;
 
 class TypeDBCredential{
 
-    private  string username;
-    private  string password;
-    private  bool tlsEnabled;
-    
-    private  Path tlsRootCA;
-
-    public function username, string password, bool tlsEnabled) : TypeDBCredential(string{
-        this(username, password, tlsEnabled, null);
+    public function __construct(
+        private string $username,
+        private string $password,
+        private bool $tlsEnabled,
+        private ?string $tlsRootCA) {
     }
 
-    public function username, string password, Path tlsRootCA) : TypeDBCredential(string{
-        this(username, password, true, tlsRootCA);
+    public function username(): string {
+        return $this->username;
     }
 
-    private TypeDBCredential(string username, string password, bool tlsEnabled,  Path tlsRootCA) {
-        this.username = username;
-        this.password = password;
-        this.tlsEnabled = tlsEnabled;
-        this.tlsRootCA = tlsRootCA;
-        assert tlsEnabled || tlsRootCA == null;
+    public function password(): string {
+        return $this->password;
     }
 
-    public function username() : string{
-        return username;
+    public function tlsEnabled(): bool {
+        return $this->tlsEnabled;
     }
 
-    public function password() : string{
-        return password;
-    }
-
-    public function tlsEnabled() : bool{
-        return tlsEnabled;
-    }
-
-    public function tlsRootCA() : Path | null{
-        return Optional.ofNullable(tlsRootCA);
+    public function tlsRootCA(): string {
+        return $this->tlsRootCA;
     }
 }

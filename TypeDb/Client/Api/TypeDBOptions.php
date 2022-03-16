@@ -20,157 +20,130 @@
  * under the License.
  */
 
-namespace TypeDb\client\Api;
+namespace TypeDb\Client\Api;
 
-use TypeDb\Client.common.exception.TypeDBClientException;
-use Typedb\Protocol\OptionsProto;
+use Exception;
 
-import javax.annotation.CheckReturnValue;
-import java.util.Optional;
+class TypeDBOptions {
 
-use TypeDb\Client.common.exception.ErrorMessage.Client.NEGATIVE_VALUE_NOT_ALLOWED;
-use TypeDb\Client.common.exception.ErrorMessage.Internal.ILLEGAL_CAST;
-use TypeDb\common.util.Objects.className;
+    private ?bool $infer = null;
+    private ?bool $traceInference = null;
+    private ?bool $explain = null;
+    private ?bool $parallel = null;
+    private ?bool $prefetch = null;
+    private ?int $prefetchSize = null;
+    private ?int $sessionIdleTimeoutMillis = null;
+    private ?int $transactionTimeoutMillis = null;
+    private ?int $schemaLockAcquireTimeoutMillis = null;
 
-class TypeDBOptions{
-
-    private Boolean infer = null;
-    private Boolean traceInference = null;
-    private Boolean explain = null;
-    private Boolean parallel = null;
-    private Boolean prefetch = null;
-    private int prefetchSize = null;
-    private int sessionIdleTimeoutMillis = null;
-    private int transactionTimeoutMillis = null;
-    private int schemaLockAcquireTimeoutMillis = null;
-
-    private TypeDBOptions() {
-    }
-
-    
-    public function TypeDBOptions core() : static{
+    public static function  core(): TypeDBOptions  {
         return new TypeDBOptions();
     }
 
-    
-    public function TypeDBOptions.Cluster cluster() : static{
-        return new Cluster();
+    public static function cluster(): TypeDBOptionsCluster {
+        return new TypeDBOptionsCluster();
     }
 
-    
-    public function isCluster() : bool{
+    public function isCluster(): bool {
         return false;
     }
 
-    
-    public function infer() : Boolean | null{
-        return Optional.ofNullable(infer);
-    }
-
-    public function infer(bool infer) : TypeDBOptions{
-        this.infer = infer;
-        return this;
-    }
-
-    
-    public function traceInference() : Boolean | null{
-        return Optional.ofNullable(traceInference);
-    }
-
-    public function traceInference(bool traceInference) : TypeDBOptions{
-        this.traceInference = traceInference;
-        return this;
-    }
-
-    
-    public function explain() : Boolean | null{
-        return Optional.ofNullable(explain);
-    }
-
-    public function explain(bool explain) : TypeDBOptions{
-        this.explain = explain;
-        return this;
-    }
-
-    
-    public function parallel() : Boolean | null{
-        return Optional.ofNullable(parallel);
-    }
-
-    public function parallel(bool parallel) : TypeDBOptions{
-        this.parallel = parallel;
-        return this;
-    }
-
-    
-    public function prefetch() : Boolean | null{
-        return Optional.ofNullable(prefetch);
-    }
-
-    public function prefetch(bool prefetch) : TypeDBOptions{
-        this.prefetch = prefetch;
-        return this;
-    }
-
-    
-    public function prefetchSize() : int | null{
-        return Optional.ofNullable(prefetchSize);
-    }
-
-    public function prefetchSize(int prefetchSize) : TypeDBOptions{
-        if (prefetchSize < 1) {
-            throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, prefetchSize);
+    public function infer(?bool $infer): bool|TypeDBOptions {
+        if (isset($infer)) {
+            $this->infer = $infer;
+            return $this;
         }
-        this.prefetchSize = prefetchSize;
-        return this;
+        return $infer;
     }
 
-    
-    public function sessionIdleTimeoutMillis() : int | null{
-        return Optional.ofNullable(sessionIdleTimeoutMillis);
-    }
-
-    public function sessionIdleTimeoutMillis(int sessionIdleTimeoutMillis) : TypeDBOptions{
-        if (sessionIdleTimeoutMillis < 1) {
-            throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, sessionIdleTimeoutMillis);
+    public function traceInference(?bool $traceInference): bool|TypeDBOptions {
+        if (isset($traceInference)) {
+            $this->traceInference = $traceInference;
+            return $this;
         }
-        this.sessionIdleTimeoutMillis = sessionIdleTimeoutMillis;
-        return this;
+        return $traceInference;
     }
 
-    
-    public function schemaLockAcquireTimeoutMillis() : int | null{
-        return Optional.ofNullable(schemaLockAcquireTimeoutMillis);
-    }
-
-    public function transactionTimeoutMillis(int transactionTimeoutMillis) : TypeDBOptions{
-        if (transactionTimeoutMillis < 1) {
-            throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, transactionTimeoutMillis);
+    public function explain(?bool $explain): bool|TypeDBOptions {
+        if (isset($explain)) {
+            $this->explain = $explain;
+            return $this;
         }
-        this.transactionTimeoutMillis = transactionTimeoutMillis;
-        return this;
+        return $explain;
     }
 
-    public function transactionTimeoutMillis() : int | null{
-        return Optional.ofNullable(transactionTimeoutMillis);
-    }
-
-    public function schemaLockAcquireTimeoutMillis(int schemaLockAcquireTimeoutMillis) : TypeDBOptions{
-        if (schemaLockAcquireTimeoutMillis < 1) {
-            throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, schemaLockAcquireTimeoutMillis);
+    public function parallel(?bool $parallel): bool|TypeDBOptions {
+        if (isset($parallel)) {
+            $this->parallel = $parallel;
+            return $this;
         }
-        this.schemaLockAcquireTimeoutMillis = schemaLockAcquireTimeoutMillis;
-        return this;
+        return $parallel;
     }
 
-    
-    public function asCluster() : Cluster{
-        throw new TypeDBClientException(ILLEGAL_CAST, className(Cluster.class));
+    public function prefetch(?bool $prefetch): bool|TypeDBOptions {
+        if (isset($prefetch)) {
+            $this->prefetch = $prefetch;
+            return $this;
+        }
+        return $prefetch;
     }
 
-    
-    public function proto() : OptionsProto.Options{
-        OptionsProto.Options.Builder builder = OptionsProto.Options.newBuilder();
+    public function prefetchSize(?int $prefetchSize): int|TypeDBOptions {
+        if (isset($prefetchSize)) {
+            if ($prefetchSize < 1) {
+                //throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, prefetchSize);
+            }
+            $this->prefetchSize = $prefetchSize;
+            return $this;
+        }
+        return $prefetchSize;
+    }
+
+    public function sessionIdleTimeoutMillis(?int $sessionIdleTimeoutMillis): int|TypeDBOptions {
+        if (isset($sessionIdleTimeoutMillis)) {
+            if ($sessionIdleTimeoutMillis < 1) {
+                //throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, prefetchSize);
+            }
+            $this->sessionIdleTimeoutMillis = $sessionIdleTimeoutMillis;
+            return $this;
+        }
+        return $sessionIdleTimeoutMillis;
+    }
+
+    public function schemaLockAcquireTimeoutMillis(?int $schemaLockAcquireTimeoutMillis): int|TypeDBOptions {
+        if (isset($schemaLockAcquireTimeoutMillis)) {
+            if ($schemaLockAcquireTimeoutMillis < 1) {
+                //throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, prefetchSize);
+            }
+            $this->schemaLockAcquireTimeoutMillis = $schemaLockAcquireTimeoutMillis;
+            return $this;
+        }
+        return $schemaLockAcquireTimeoutMillis;
+    }
+
+    public function transactionTimeoutMillis(?int $transactionTimeoutMillis): int|TypeDBOptions {
+        if (isset($transactionTimeoutMillis)) {
+            if ($transactionTimeoutMillis < 1) {
+                //throw new TypeDBClientException(NEGATIVE_VALUE_NOT_ALLOWED, prefetchSize);
+            }
+            $this->transactionTimeoutMillis = $transactionTimeoutMillis;
+            return $this;
+        }
+        return $transactionTimeoutMillis;
+    }
+
+
+    /**
+     * @throws Exception
+     */
+    public function asCluster() {
+        //throw new TypeDBClientException(ILLEGAL_CAST, className(Cluster.class));
+        throw new Exception();
+    }
+    /*
+
+    public function OptionsProto.Options proto() {
+OptionsProto.Options.Builder builder = OptionsProto.Options.newBuilder();
         infer().ifPresent(builder::setInfer);
         traceInference().ifPresent(builder::setTraceInference);
         explain().ifPresent(builder::setExplain);
@@ -184,31 +157,6 @@ class TypeDBOptions{
 
         return builder.build();
     }
+    */
 
-    public function class Cluster extends TypeDBOptions : static{
-
-        private Boolean readAnyReplica = null;
-
-        
-        public function readAnyReplica() : Boolean | null{
-            return Optional.ofNullable(readAnyReplica);
-        }
-
-        public function readAnyReplica(bool readAnyReplica) : Cluster{
-            this.readAnyReplica = readAnyReplica;
-            return this;
-        }
-
-        
-        
-        public function isCluster() : bool{
-            return true;
-        }
-
-        
-        
-        public function asCluster() : Cluster{
-            return this;
-        }
-    }
 }

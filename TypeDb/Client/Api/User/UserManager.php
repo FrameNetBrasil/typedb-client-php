@@ -22,18 +22,13 @@
 
 namespace TypeDb\Client\Api\User;
 
-import javax.annotation.CheckReturnValue;
-import java.util.Set;
+interface UserManager {
 
-public function UserManager : interface{
+    public function get(string $username): User;
 
-    
-    User get(string username);
+    public function contains(string $username): bool;
 
-    
-    bool contains(string username);
+    public function create(string $username, string $password): void;
 
-    void create(string username, string password);
-
-    Set<User> all();
+    public function all(): array;
 }

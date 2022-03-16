@@ -22,20 +22,11 @@
 
 namespace TypeDb\Client\Api\Logic;
 
-import com.vaticle.typeql.lang.pattern.Pattern;
+interface LogicManager {
 
-import javax.annotation.CheckReturnValue;
-import javax.annotation.Nullable;
-import java.util.stream.Stream;
+    public function getRule(string $label): Rule;
 
-public function LogicManager : interface{
+    public function getRules(); //stream
 
-    
-    
-    Rule getRule(string label);
-
-    
-    Stream<? extends Rule> getRules();
-
-    Rule putRule(string label, Pattern when, Pattern then);
+    public function putRule(string $label, /*Pattern*/ string $when, /*Pattern*/ string $then);
 }

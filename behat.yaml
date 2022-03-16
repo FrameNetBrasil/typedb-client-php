@@ -1,0 +1,21 @@
+# behat.yml
+
+default:
+  autoload:
+    '': '%paths.base%'
+  suites:
+    database_feature:
+      paths:    [ '%paths.base%/typedb-behaviour/connection/database.feature' ]
+      contexts: [ TypeDb\Tests\Behaviour\Connection\DatabaseContext ]
+    session_feature:
+      paths:    [ '%paths.base%/typedb-behaviour/connection/session.feature' ]
+      contexts: [ TypeDb\Tests\Behaviour\Connection\SessionContext ]
+    transaction_feature:
+      paths:    [ '%paths.base%/typedb-behaviour/connection/transaction.feature' ]
+      contexts: [ TypeDb\Tests\Behaviour\Connection\TransactionContext ]
+    user_feature:
+      paths:    [ '%paths.base%/typedb-behaviour/connection/user.feature' ]
+      contexts: [ TypeDb\Tests\Behaviour\Connection\UserContext ]
+    attribute_feature:
+      paths:    [ '%paths.base%/typedb-behaviour/concept/thing/attribute.feature' ]
+      contexts: [ TypeDb\Tests\Behaviour\Concept\Thing\AttributeContext ]

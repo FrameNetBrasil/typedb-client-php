@@ -20,82 +20,36 @@
  * under the License.
  */
 
-namespace TypeDb\client\Api;
+namespace TypeDb\Client\Api;
 
 use TypeDb\Client\Api\Concept\ConceptManager;
 use TypeDb\Client\Api\Logic\LogicManager;
-use TypeDb\Client\Api\Query\QueryFuture;
 use TypeDb\Client\Api\Query\QueryManager;
-use Typedb\Protocol\TransactionProto;
 
 interface TypeDBTransaction {
 
     
-    bool isOpen();
+    public function isOpen():bool;
 
     
-    Type type();
+    public function type(): TypeDBTransactionType;
 
     
-    TypeDBOptions options();
+    public function options(): TypeDBOptions ;
 
     
-    ConceptManager concepts();
+    public function concepts(): ConceptManager ;
 
     
-    LogicManager logic();
+    public function logic(): LogicManager ;
 
     
-    QueryManager query();
+    public function query(): QueryManager ;
 
-    void commit();
+    public function commit():void;
 
-    void rollback();
+    public function rollback():void;
 
-    void close();
+    public function close():void;
 
-    enum Type {
-        READ(0),
-        WRITE(1);
-
-        private  int id;
-        private  bool isWrite;
-
-        Type(int id) {
-            this.id = id;
-            this.isWrite = id == 1;
-        }
-
-        public function Type of(int value) : static{
-            for (Type t : values()) {
-                if (t.id == value) return t;
-            }
-            return null;
-        }
-
-        public function id() : int{
-            return id;
-        }
-
-        public function isRead() : bool{
-            return !isWrite;
-        }
-
-        public function isWrite() : bool{
-            return isWrite;
-        }
-
-        public function proto() : TransactionProto.Transaction.Type{
-            return TransactionProto.Transaction.Type.forNumber(id);
-        }
-    }
-
-    interface Extended extends TypeDBTransaction {
-
-        TransactionProto.Transaction.Res execute(TransactionProto.Transaction.Req.Builder request);
-
-        QueryFuture<TransactionProto.Transaction.Res> query(TransactionProto.Transaction.Req.Builder request);
-
-        Stream<TransactionProto.Transaction.ResPart> stream(TransactionProto.Transaction.Req.Builder request);
-    }
 }

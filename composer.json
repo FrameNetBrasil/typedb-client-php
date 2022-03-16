@@ -11,5 +11,8 @@
       "Typedb\\": "TypeDb/Typedb/",
       "GPBMetadata\\": ["TypeDb/GPBMetadata/"]
     }
+  },
+  "require-dev": {
+    "behat/behat": "^3.0"
   }
 }

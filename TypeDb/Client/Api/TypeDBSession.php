@@ -20,68 +20,23 @@
  * under the License.
  */
 
-namespace TypeDb\client\Api;
+namespace TypeDb\Client\Api;
 
-use TypeDb\Client.api.database.Database;
-use Typedb\Protocol\SessionProto;
+use TypeDb\Client\Api\Database\Database;
 
-import javax.annotation.CheckReturnValue;
-
-public function TypeDBSession extends AutoCloseable : interface{
+interface TypeDBSession {
 
     
-    bool isOpen();
+    public function isOpen():bool;
 
-    
-    Type type();
+    public function type(): TypeDBSessionType;
 
-    
-    Database database();
+    public function database(): Database;
 
-    
-    TypeDBOptions options();
+    public function options(): TypeDBOptions;
 
-    
-    TypeDBTransaction transaction(TypeDBTransaction.Type type);
+    public function transaction(TypeDBTransactionType $type, ?TypeDBOptions $options): TypeDBTransaction ;
 
-    
-    TypeDBTransaction transaction(TypeDBTransaction.Type type, TypeDBOptions options);
+    public function close(): void;
 
-    void close();
-
-    enum Type {
-        DATA(0),
-        SCHEMA(1);
-
-        private  int id;
-        private  bool isSchema;
-
-        Type(int id) {
-            this.id = id;
-            this.isSchema = id == 1;
-        }
-
-        public function Type of(int value) : static{
-            for (Type t : values()) {
-                if (t.id == value) return t;
-            }
-            return null;
-        }
-
-        public function id() : int{
-            return id;
-        }
-
-        public function isData() : bool{
-            return !isSchema;
-        }
-
-        public function isSchema() : bool{
-            return isSchema;
-        }
-
-        public function proto() : SessionProto.Session.Type{
-            return SessionProto.Session.Type.forNumber(id);
-        }
-    }
 }

@@ -22,19 +22,16 @@
 
 namespace TypeDb\Client\Api\Logic;
 
-use TypeDb\Client\Api\Answer.ConceptMap;
+use TypeDb\Client\Api\Answer\ConceptMap;
 
-import java.util.Map;
-import java.util.Set;
+interface Explanation {
 
-public function Explanation : interface{
+    public function rule(): Rule;
 
-    Rule rule();
+    public function conclusion(): ConceptMap;
 
-    ConceptMap conclusion();
+    public function condition(): ConceptMap;
 
-    ConceptMap condition();
-
-    Map<string, Set<string>> variableMapping();
+    public function variableMapping(): array;
 
 }

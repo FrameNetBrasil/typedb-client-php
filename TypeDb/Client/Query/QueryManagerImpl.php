@@ -19,7 +19,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/*
 namespace TypeDb\Client\Query;
 
 use TypeDb\Client.api.TypeDBOptions;
@@ -57,9 +57,9 @@ use TypeDb\Client.common.rpc.RequestBuilder.QueryManager.matchGroupReq;
 use TypeDb\Client.common.rpc.RequestBuilder.QueryManager.matchReq;
 use TypeDb\Client.common.rpc.RequestBuilder.QueryManager.undefineReq;
 use TypeDb\Client.common.rpc.RequestBuilder.QueryManager.updateReq;
-
-public function class QueryManagerImpl implements QueryManager : final{
-
+*/
+class QueryManagerImpl implements QueryManager {
+/*
     private  TypeDBTransaction.Extended transactionExt;
 
     public function transactionExt) : QueryManagerImpl(TypeDBTransaction.Extended{
@@ -281,4 +281,5 @@ public function class QueryManagerImpl implements QueryManager : final{
     private Stream<QueryProto.QueryManager.ResPart> stream(TransactionProto.Transaction.Req.Builder req) {
         return transactionExt.stream(req).map(TransactionProto.Transaction.ResPart::getQueryManagerResPart);
     }
+*/
 }

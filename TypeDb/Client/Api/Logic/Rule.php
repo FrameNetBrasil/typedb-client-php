@@ -22,35 +22,24 @@
 
 namespace TypeDb\Client\Api\Logic;
 
-use TypeDb\Client.api.TypeDBTransaction;
-import com.vaticle.typeql.lang.pattern.Pattern;
+use TypeDb\client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\Logic\Remote\Rule as RuleRemote;
 
-import javax.annotation.CheckReturnValue;
-
-public function Rule : interface{
+interface Rule {
 
     
-    string getLabel();
+    public function getLabel(): string;
 
     
-    Pattern getWhen();
+    public function getWhen(): string; //Pattern;
 
     
-    Pattern getThen();
+    public function getThen(): string; //Pattern;
 
     
-    Rule.Remote asRemote(TypeDBTransaction transaction);
+    public function asRemote(TypeDBTransaction $transaction): RuleRemote;
 
     
-    bool isRemote();
+    public function isRemote(): bool;
 
-    interface Remote extends Rule {
-
-        void setLabel(string label);
-
-        void delete();
-
-        
-        bool isDeleted();
-    }
 }
