@@ -46,19 +46,22 @@ import static com.vaticle.typedb.client.common.exception.ErrorMessage.Internal.I
 import static com.vaticle.typedb.common.util.Objects.className;
 */
 
-abstract class TypeDBClientImpl implements TypeDBClient {
+class TypeDBClientImpl implements TypeDBClient {
 
     private static string $TYPEDB_CLIENT_RPC_THREAD_NAME = "typedb-client-rpc";
 
     private RequestTransmitter $transmitter;
     private TypeDBDatabaseManagerImpl $databaseMgr;
 //    private final ConcurrentMap<ByteString, TypeDBSessionImpl> sessions;
+    private array $sessions;
 
     public function __construct(int $parallelisation) {
 //        NamedThreadFactory threadFactory = NamedThreadFactory.create(TYPEDB_CLIENT_RPC_THREAD_NAME);
 //        transmitter = new RequestTransmitter(parallelisation, threadFactory);
 //        databaseMgr = new TypeDBDatabaseManagerImpl(this);
 //        sessions = new ConcurrentHashMap<>();
+        $this->databaseMgr = new TypeDBDatabaseManagerImpl($this);
+        $this->sessions = [];
     }
 
     public function calculateParallelisation(): int {

@@ -31,32 +31,52 @@ import io.grpc.netty.NettyChannelBuilder;
 namespace TypeDb\Client\Connection\Core;
 
 use TypeDb\Client\Connection\TypeDBClientImpl;
+use Typedb\Protocol\TypeDBClient;
 
 class CoreClient extends TypeDBClientImpl {
 
-    /*
-    private final ManagedChannel channel;
-    private final TypeDBStub stub;
+    private TypeDBClient $stub;
 
-    public CoreClient(String address) {
-        this(address, calculateParallelisation());
+    public function __construct(string $address, int $parallelisation = null) {
+        if (is_null($parallelisation)) {
+            $parallelisation = $this->calculateParallelisation();
+        }
+        parent::__construct($parallelisation);
+//        $channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
+//        stub = CoreStub.create(channel);
+//        validateConnectionOrThrow();
+        $this->stub = new TypeDBClient($address, [
+            'credentials' => Grpc\ChannelCredentials::createInsecure(),
+        ]);
     }
 
-    public CoreClient(String address, int parallelisation) {
-        super(parallelisation);
-        channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
-        stub = CoreStub.create(channel);
-        validateConnectionOrThrow();
-    }
 
-    @Override
-    public ManagedChannel channel() {
-        return channel;
-    }
+/*
+private final ManagedChannel channel;
+private final TypeDBStub stub;
 
-    @Override
-    public TypeDBStub stub() {
-        return stub;
+public CoreClient(String address) {
+    this(address, calculateParallelisation());
+}
+
+public CoreClient(String address, int parallelisation) {
+    super(parallelisation);
+    channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
+    stub = CoreStub.create(channel);
+    validateConnectionOrThrow();
+}
+
+@Override
+public ManagedChannel channel() {
+    return channel;
+}
+
+@Override
+public TypeDBStub stub() {
+    return stub;
+}
+*/
+    public function stub(): TypeDbClient {
+        return $this->stub;
     }
-    */
 }

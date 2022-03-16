@@ -29,7 +29,24 @@ import io.grpc.ManagedChannel;
 */
 namespace TypeDb\Client\Connection\Core;
 
+use TypeDb\Client\Common\RPC\TypeDBStub;
+use Typedb\Protocol\TypeDBClient;
+
 class CoreStub extends TypeDBStub {
+
+    private TypeDbStub $stub;
+
+    public function __construct() {
+        $this->stub = new TypeDBStub();
+    }
+
+    protected function blockingStub() {
+        return $this->stub;
+    }
+
+    protected function asyncStub() {
+        return $this->stub;
+    }
 
     /*
     private final ManagedChannel channel;

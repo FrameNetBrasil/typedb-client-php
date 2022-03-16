@@ -41,43 +41,48 @@ import static java.util.stream.Collectors.toList;
 namespace TypeDb\Client\Connection;
 
 use TypeDb\Client\Api\Database\DatabaseManager;
+use TypeDb\Client\Api\Database\Database;
+use TypeDb\Client\Common\Exception\ErrorMessage;
+use TypeDb\Client\Common\Exception\TypeDBClientException;
+use TypeDb\Client\Common\RPC\RequestBuilder\Core\DatabaseManager as RBDatabaseManager;
+use Typedb\Protocol\TypeDBClient;
 
 class TypeDBDatabaseManagerImpl implements DatabaseManager {
 
-    private final TypeDBClientImpl client;
+    private TypeDBClientImpl $client;
 
-    public TypeDBDatabaseManagerImpl(TypeDBClientImpl client) {
-        this.client = client;
+    public function __construct(TypeDBClientImpl $client) {
+        $this->client = $client;
     }
 
-    @Override
-    public Database get(String name) {
-        if (contains(name)) return new TypeDBDatabaseImpl(this, name);
-        else throw new TypeDBClientException(DB_DOES_NOT_EXIST, name);
+    public function get(string $name): Database {
+        if ($this->contains($name)) {
+            return new TypeDBDatabaseImpl($this, $name);
+        }
+        else throw new TypeDBClientException(ErrorMessage::DB_DOES_NOT_EXIST($name));
     }
 
-    @Override
-    public boolean contains(String name) {
-        return stub().databasesContains(containsReq(nonNull(name))).getContains();
+    public function contains(string $name):bool {
+        return $this->stub()->databases_contains(RBDatabaseManager::containsReq($this->nonNull($name)))->getContains();
     }
 
-    @Override
-    public void create(String name) {
-        stub().databasesCreate(createReq(nonNull(name)));
+    public function create(string $name): void {
+        //$this->client->databasesCreate(createReq(nonNull(name)));
     }
 
-    @Override
-    public List<TypeDBDatabaseImpl> all() {
-        List<String> databases = stub().databasesAll(allReq()).getNamesList();
-        return databases.stream().map(name -> new TypeDBDatabaseImpl(this, name)).collect(toList());
+    public function all(): array {
+        //$databases = $this->client->databasesAll(allReq()).getNamesList();
+        //return $databases->stream()->map(name -> new TypeDBDatabaseImpl(this, name)).collect(toList());
     }
 
-    TypeDBStub stub() {
-        return client.stub();
+    publoic function stub(): TypeDbClient {
+        return $this->client->stub();
     }
 
-    static String nonNull(String name) {
-        if (name == null) throw new TypeDBClientException(MISSING_DB_NAME);
-        return name;
+    static private function nonNull(string $name) {
+        if (is_null($name)) {
+            throw new TypeDBClientException(ErrorMessage::MISSING_DB_NAME());
+        }
+        return $name;
     }
 }

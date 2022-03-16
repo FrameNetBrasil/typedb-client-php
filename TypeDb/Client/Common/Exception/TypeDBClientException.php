@@ -22,32 +22,44 @@
 
 namespace TypeDb\Client\Common\Exception;
 
+/*
+
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
 import javax.annotation.Nullable;
+*/
 
-class TypeDBClientException extends RuntimeException{
+use RuntimeException;
 
+class TypeDBClientException extends RuntimeException {
+
+
+    public function __construct(string $error, ...$parameters) {
+           $this->errorMessage = null;
+           throw $parameters[0]($error);
+    }
+
+    /*
     // TODO: propagate exception from the server side in a less-brittle way
-    private static final string CLUSTER_REPLICA_NOT_PRIMARY_ERROR_CODE = "[RPL01]";
-    private static final string CLUSTER_TOKEN_CREDENTIAL_INVALID_ERROR_CODE = "[CLS08]";
+    private static final String CLUSTER_REPLICA_NOT_PRIMARY_ERROR_CODE = "[RPL01]";
+    private static final String CLUSTER_TOKEN_CREDENTIAL_INVALID_ERROR_CODE = "[CLS08]";
 
-    
-    private  ErrorMessage errorMessage;
+    @Nullable
+    private final ErrorMessage errorMessage;
 
-    public function error, Object... parameters) : TypeDBClientException(ErrorMessage{
+    public TypeDBClientException(ErrorMessage error, Object... parameters) {
         super(error.message(parameters));
         assert !getMessage().contains("%s");
         this.errorMessage = error;
     }
 
-    public function message, Throwable cause) : TypeDBClientException(string{
+    public TypeDBClientException(String message, Throwable cause) {
         super(message, cause);
         this.errorMessage = null;
     }
 
-    public function TypeDBClientException of(StatusRuntimeException sre) : static{
+    public static TypeDBClientException of(StatusRuntimeException sre) {
         if (isRstStream(sre)) {
             return new TypeDBClientException(ErrorMessage.Client.UNABLE_TO_CONNECT);
         } else if (isReplicaNotPrimary(sre)) {
@@ -59,31 +71,32 @@ class TypeDBClientException extends RuntimeException{
         }
     }
 
-    private static bool isRstStream(StatusRuntimeException statusRuntimeException) {
+    private static boolean isRstStream(StatusRuntimeException statusRuntimeException) {
         // "Received Rst Stream" occurs if the server is in the process of shutting down.
         return statusRuntimeException.getStatus().getCode() == Status.Code.UNAVAILABLE ||
                 statusRuntimeException.getStatus().getCode() == Status.Code.UNKNOWN ||
                 statusRuntimeException.getMessage().contains("Received Rst Stream");
     }
 
-    private static bool isReplicaNotPrimary(StatusRuntimeException statusRuntimeException) {
+    private static boolean isReplicaNotPrimary(StatusRuntimeException statusRuntimeException) {
         return statusRuntimeException.getStatus().getCode() == Status.Code.INTERNAL &&
                 statusRuntimeException.getStatus().getDescription() != null &&
                 statusRuntimeException.getStatus().getDescription().contains(CLUSTER_REPLICA_NOT_PRIMARY_ERROR_CODE);
     }
 
-    private static bool isTokenCredentialInvalid(StatusRuntimeException statusRuntimeException) {
+    private static boolean isTokenCredentialInvalid(StatusRuntimeException statusRuntimeException) {
         return statusRuntimeException.getStatus().getCode() == Status.Code.UNAUTHENTICATED &&
                 statusRuntimeException.getStatus().getDescription() != null &&
                 statusRuntimeException.getStatus().getDescription().contains(CLUSTER_TOKEN_CREDENTIAL_INVALID_ERROR_CODE);
     }
 
-    public function getName() : string{
+    public String getName() {
         return this.getClass().getName();
     }
 
-    
-    public function getErrorMessage() : ErrorMessage{
+    @Nullable
+    public ErrorMessage getErrorMessage() {
         return errorMessage;
     }
+    */
 }

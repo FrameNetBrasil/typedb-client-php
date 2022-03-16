@@ -22,6 +22,7 @@
 
 namespace TypeDb\Client\Common\RPC;
 
+/*
 use TypeDb\Client.common.exception.TypeDBClientException;
 use Typedb\Protocol\CoreDatabaseProto;
 use Typedb\Protocol\SessionProto;
@@ -33,45 +34,60 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import java.util.function.Supplier;
+*/
+use TypeDb\Client\Common\RPC\TypeDBStub;
 
-public function class TypeDBStub : abstract{
+use Typedb\Protocol\CoreDatabaseManager\Create\Req as CreateReq;
+use Typedb\Protocol\CoreDatabaseManager\Create\Res as CreateRes;
+use Typedb\Protocol\CoreDatabaseManager\Contains\Req as ContainsReq;
+use Typedb\Protocol\CoreDatabaseManager\Contains\Res as ContainsRes;
+use Typedb\Protocol\CoreDatabaseManager\All\Req as AllReq;
+use Typedb\Protocol\CoreDatabaseManager\All\Res as AllRes;
 
-    public function databasesContains(CoreDatabaseProto.CoreDatabaseManager.Contains.Req request) : CoreDatabaseProto.CoreDatabaseManager.Contains.Res{
-        return resilientCall(() -> blockingStub().databasesContains(request));
+
+class TypeDBStub {
+
+    public function databasesContains(ContainsReq $request) : ContainsRes {
+        return $this->blockingStub()->databases_contains($request);
     }
 
-    public function databasesCreate(CoreDatabaseProto.CoreDatabaseManager.Create.Req request) : CoreDatabaseProto.CoreDatabaseManager.Create.Res{
-        return resilientCall(() -> blockingStub().databasesCreate(request));
+    public function databasesCreate(CreateReq $request) : CreateRes{
+        return $this->blockingStub()->databases_create($request);
     }
 
-    public function databasesAll(CoreDatabaseProto.CoreDatabaseManager.All.Req request) : CoreDatabaseProto.CoreDatabaseManager.All.Res{
-        return resilientCall(() -> blockingStub().databasesAll(request));
+    public function databasesAll(AllReq $request) : AllRes{
+        return $this->blockingStub()->databases_zll($request);
     }
 
-    public function databaseSchema(CoreDatabaseProto.CoreDatabase.Schema.Req request) : CoreDatabaseProto.CoreDatabase.Schema.Res{
-        return resilientCall(() -> blockingStub().databaseSchema(request));
+    public function databaseSchema(SchemaReq $request) : SchemaRes{
+        return $this->blockingStub()->database_schema($request);
     }
 
-    public function databaseDelete(CoreDatabaseProto.CoreDatabase.Delete.Req request) : CoreDatabaseProto.CoreDatabase.Delete.Res{
-        return resilientCall(() -> blockingStub().databaseDelete(request));
+    public function databaseDelete(DeleteReq $request) : DeleteRes{
+        return $this->blockingStub()->database_delete($request));
     }
 
-    public function sessionOpen(SessionProto.Session.Open.Req request) : SessionProto.Session.Open.Res{
-        return resilientCall(() -> blockingStub().sessionOpen(request));
+    public function sessionOpen(Open.Req $request) : SessionProto.Session.Open.Res{
+        return $this->blockingStub()->session_open($request));
     }
 
-    public function sessionClose(SessionProto.Session.Close.Req request) : SessionProto.Session.Close.Res{
-        return resilientCall(() -> blockingStub().sessionClose(request));
+    public function sessionClose(SessionProto.Session.Close.Req $request) : SessionProto.Session.Close.Res{
+        return $this->blockingStub()->session_close($request));
     }
 
-    public function sessionPulse(SessionProto.Session.Pulse.Req request) : SessionProto.Session.Pulse.Res{
-        return resilientCall(() -> blockingStub().sessionPulse(request));
+    public function sessionPulse(SessionProto.Session.Pulse.Req $request) : SessionProto.Session.Pulse.Res{
+        return $this->blockingStub()->session_pulse($request));
     }
 
     public function transaction(StreamObserver<TransactionProto.Transaction.Server> responseObserver) : StreamObserver<TransactionProto.Transaction.Client>{
-        return resilientCall(() -> asyncStub().transaction(responseObserver));
+        return $this->asyncStub()->transaction(responseObserver));
     }
 
+    protected function  blockingStub(): TypeDBStub;
+
+    protected function asyncStub():TypeDBStub;
+
+    /*
     protected abstract ManagedChannel channel();
 
     protected abstract TypeDBGrpc.TypeDBBlockingStub blockingStub();
@@ -97,4 +113,5 @@ public function class TypeDBStub : abstract{
             channel().resetConnectBackoff();
         }
     }
+    */
 }
