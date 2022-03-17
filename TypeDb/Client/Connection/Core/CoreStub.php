@@ -29,54 +29,62 @@ import io.grpc.ManagedChannel;
 */
 namespace TypeDb\Client\Connection\Core;
 
+use Grpc\ChannelCredentials;
 use TypeDb\Client\Common\RPC\TypeDBStub;
 use Typedb\Protocol\TypeDBClient;
 
 class CoreStub extends TypeDBStub {
 
-    private TypeDbStub $stub;
+    private TypeDbClient $stub;
 
-    public function __construct() {
-        $this->stub = new TypeDBStub();
+    public function __construct(string $address) {
+        $this->stub = new TypeDBClient($address, [
+            'credentials' => ChannelCredentials::createInsecure(),
+        ]);
     }
 
-    protected function blockingStub() {
+    protected function blockingStub(): TypeDbClient {
         return $this->stub;
     }
 
-    protected function asyncStub() {
+    protected function asyncStub(): TypeDbClient {
         return $this->stub;
     }
 
-    /*
-    private final ManagedChannel channel;
-    private final TypeDBGrpc.TypeDBBlockingStub blockingStub;
-    private final TypeDBGrpc.TypeDBStub asyncStub;
-
-    private CoreStub(ManagedChannel channel) {
-        super();
-        this.channel = channel;
-        this.blockingStub = TypeDBGrpc.newBlockingStub(channel);
-        this.asyncStub = TypeDBGrpc.newStub(channel);
+    public static function create(string $address): CoreStub {
+        return new CoreStub($address);
     }
 
-    public static CoreStub create(ManagedChannel channel) {
-        return new CoreStub(channel);
-    }
 
-    @Override
-    protected ManagedChannel channel() {
-        return channel;
-    }
+/*
+private final ManagedChannel channel;
+private final TypeDBGrpc.TypeDBBlockingStub blockingStub;
+private final TypeDBGrpc.TypeDBStub asyncStub;
 
-    @Override
-    protected TypeDBGrpc.TypeDBBlockingStub blockingStub() {
-        return blockingStub;
-    }
+private CoreStub(ManagedChannel channel) {
+    super();
+    this.channel = channel;
+    this.blockingStub = TypeDBGrpc.newBlockingStub(channel);
+    this.asyncStub = TypeDBGrpc.newStub(channel);
+}
 
-    @Override
-    protected TypeDBGrpc.TypeDBStub asyncStub() {
-        return asyncStub;
-    }
-    */
+public static CoreStub create(ManagedChannel channel) {
+    return new CoreStub(channel);
+}
+
+@Override
+protected ManagedChannel channel() {
+    return channel;
+}
+
+@Override
+protected TypeDBGrpc.TypeDBBlockingStub blockingStub() {
+    return blockingStub;
+}
+
+@Override
+protected TypeDBGrpc.TypeDBStub asyncStub() {
+    return asyncStub;
+}
+*/
 }

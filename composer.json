@@ -3,7 +3,8 @@
   "description": "Implementation of typedb-client-php",
   "require": {
     "grpc/grpc": "^v1.39.0",
-    "google/protobuf": "^v3.12.2"
+    "google/protobuf": "^v3.12.2",
+    "ext-grpc": "*"
   },
   "autoload": {
     "psr-4": {

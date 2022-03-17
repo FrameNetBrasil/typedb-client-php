@@ -48,133 +48,237 @@ import static com.vaticle.typedb.client.common.rpc.RequestBuilder.Session.pulseR
 */
 namespace TypeDb\Client\Connection;
 
+use Behat\Testwork\Counter\Timer;
+use Symfony\Component\String\ByteString;
+use TypeDb\Client\Api\TypeDbSessionType as Type;
+use TypeDb\Client\Api\TypeDBOptions;
 use TypeDb\Client\Api\TypeDBSession;
+use TypeDb\Client\Api\TypeDBTransaction;
+use TypeDb\Client\Api\TypeDBTransactionType;
+use TypeDb\Client\Common\RPC\TypeDBStub;
+use TypeDb\Client\Stream\RequestTransmitter;
 
 class TypeDBSessionImpl implements TypeDBSession {
 
-    /*
+    private static int $PULSE_INTERVAL_MILLIS = 5_000;
 
-    private static final int PULSE_INTERVAL_MILLIS = 5_000;
+    private TypeDBClientImpl $client;
+    private TypeDBDatabaseImpl $database;
+    private ByteString $sessionID;
+    private array $transactions;
+    private Type $type;
+    private TypeDBOptions $options;
+    private Timer $pulse;
+//    private ReadWriteLock $accessLock;
+//    private AtomicBoolean $isOpen;
+    private int $networkLatencyMillis;
 
-    private final TypeDBClientImpl client;
-    private final TypeDBDatabaseImpl database;
-    private final ByteString sessionID;
-    private final ConcurrentSet<TypeDBTransaction.Extended> transactions;
-    private final Type type;
-    private final TypeDBOptions options;
-    private final Timer pulse;
-    private final ReadWriteLock accessLock;
-    private final AtomicBoolean isOpen;
-    private final int networkLatencyMillis;
-
-    public TypeDBSessionImpl(TypeDBClientImpl client, String database, Type type, TypeDBOptions options) {
-        this.client = client;
-        this.type = type;
-        this.options = options;
-        Instant startTime = Instant.now();
-        SessionProto.Session.Open.Res res = client.stub().sessionOpen(
-                openReq(database, type.proto(), options.proto())
+    public function __construct(TypeDBClientImpl $client, string $database, Type $type, TypeDBOptions $options) {
+        $this->client = $client;
+        $this->type = $type;
+        $this->options = $options;
+        $startTime = time();
+        $res = $this->client->stub()->sessionOpen(
+                openReq($database, $type->proto(), $options->proto())
         );
-        Instant endTime = Instant.now();
-        this.database = new TypeDBDatabaseImpl(client.databases(), database);
-        networkLatencyMillis = (int) (Duration.between(startTime, endTime).toMillis() - res.getServerDurationMillis());
-        sessionID = res.getSessionId();
-        transactions = new ConcurrentSet<>();
-        accessLock = new StampedLock().asReadWriteLock();
-        isOpen = new AtomicBoolean(true);
-        pulse = new Timer();
-        pulse.scheduleAtFixedRate(this.new PulseTask(), 0, PULSE_INTERVAL_MILLIS);
+        $endTime = time();
+        $this->database = new TypeDBDatabaseImpl($client->databases(), $database);
+        $this->networkLatencyMillis = 0;//(int) (Duration.between(startTime, endTime).toMillis() - res.getServerDurationMillis());
+        $sessionID = $res->getSessionId();
+        $transactions = [];
+        //accessLock = new StampedLock().asReadWriteLock();
+        //isOpen = new AtomicBoolean(true);
+        //pulse = new Timer();
+        //pulse.scheduleAtFixedRate(this.new PulseTask(), 0, PULSE_INTERVAL_MILLIS);
     }
 
-    @Override
-    public boolean isOpen() {
-        return isOpen.get();
+    public function isOpen():bool {
+    return $this->isOpen->get();
+}
+
+public function type(): Type {
+    return $this->type;
+}
+
+public function database(): TypeDBDatabaseImpl  {
+    return $this->database;
+}
+
+public function options(): TypeDBOptions  {
+    return $this->options;
+}
+
+public function id(): ByteString  {
+return $this->sessionID;
+}
+
+public function stub(): TypeDBStub  {
+    return $this->client->stub();
+}
+
+public function transmitter(): RequestTransmitter  {
+    return $this->client->transmitter();
+}
+
+public function networkLatencyMillis():int {
+    return $this->networkLatencyMillis;
+}
+
+public function close(): void {
+//    try {
+//        accessLock.writeLock().lock();
+//        if (isOpen.compareAndSet(true, false)) {
+//            transactions.forEach(TypeDBTransaction.Extended::close);
+//            client.removeSession(this);
+//            pulse.cancel();
+//            try {
+//                stub().sessionClose(closeReq(sessionID));
+//            } catch (TypeDBClientException e) {
+//                // Most likely the session is already closed or the server is no longer running.
+//            }
+//        }
+//    } finally {
+//        accessLock.writeLock().unlock();
+//    }
+}
+
+    public function transaction(TypeDBTransactionType $type,  TypeDBOptions|null $options): TypeDBTransaction  {
+//    try {
+//        accessLock.readLock().lock();
+//        if (!isOpen.get()) throw new TypeDBClientException(SESSION_CLOSED);
+//        TypeDBTransaction.Extended transactionRPC = new TypeDBTransactionImpl(this, sessionID, type, options);
+//        transactions.add(transactionRPC);
+//        return transactionRPC;
+//    } finally {
+//    accessLock.readLock().unlock();
+//}
+        return new TypeDBTransactionImpl($this, $sessionID, $type, $options);
     }
 
-    @Override
-    public Type type() {
-        return type;
+
+/*
+
+private static final int PULSE_INTERVAL_MILLIS = 5_000;
+
+private final TypeDBClientImpl client;
+private final TypeDBDatabaseImpl database;
+private final ByteString sessionID;
+private final ConcurrentSet<TypeDBTransaction.Extended> transactions;
+private final Type type;
+private final TypeDBOptions options;
+private final Timer pulse;
+private final ReadWriteLock accessLock;
+private final AtomicBoolean isOpen;
+private final int networkLatencyMillis;
+
+public TypeDBSessionImpl(TypeDBClientImpl client, String database, Type type, TypeDBOptions options) {
+    this.client = client;
+    this.type = type;
+    this.options = options;
+    Instant startTime = Instant.now();
+    SessionProto.Session.Open.Res res = client.stub().sessionOpen(
+            openReq(database, type.proto(), options.proto())
+    );
+    Instant endTime = Instant.now();
+    this.database = new TypeDBDatabaseImpl(client.databases(), database);
+    networkLatencyMillis = (int) (Duration.between(startTime, endTime).toMillis() - res.getServerDurationMillis());
+    sessionID = res.getSessionId();
+    transactions = new ConcurrentSet<>();
+    accessLock = new StampedLock().asReadWriteLock();
+    isOpen = new AtomicBoolean(true);
+    pulse = new Timer();
+    pulse.scheduleAtFixedRate(this.new PulseTask(), 0, PULSE_INTERVAL_MILLIS);
+}
+
+@Override
+public boolean isOpen() {
+    return isOpen.get();
+}
+
+@Override
+public Type type() {
+    return type;
+}
+
+@Override
+public TypeDBDatabaseImpl database() {
+    return database;
+}
+
+@Override
+public TypeDBOptions options() {
+    return options;
+}
+
+@Override
+public TypeDBTransaction transaction(TypeDBTransaction.Type type) {
+    return transaction(type, TypeDBOptions.core());
+}
+
+@Override
+public TypeDBTransaction transaction(TypeDBTransaction.Type type, TypeDBOptions options) {
+    try {
+        accessLock.readLock().lock();
+        if (!isOpen.get()) throw new TypeDBClientException(SESSION_CLOSED);
+        TypeDBTransaction.Extended transactionRPC = new TypeDBTransactionImpl(this, sessionID, type, options);
+        transactions.add(transactionRPC);
+        return transactionRPC;
+    } finally {
+        accessLock.readLock().unlock();
     }
+}
 
-    @Override
-    public TypeDBDatabaseImpl database() {
-        return database;
-    }
+ByteString id() {
+    return sessionID;
+}
 
-    @Override
-    public TypeDBOptions options() {
-        return options;
-    }
+TypeDBStub stub() {
+    return client.stub();
+}
 
-    @Override
-    public TypeDBTransaction transaction(TypeDBTransaction.Type type) {
-        return transaction(type, TypeDBOptions.core());
-    }
+RequestTransmitter transmitter() {
+    return client.transmitter();
+}
 
-    @Override
-    public TypeDBTransaction transaction(TypeDBTransaction.Type type, TypeDBOptions options) {
-        try {
-            accessLock.readLock().lock();
-            if (!isOpen.get()) throw new TypeDBClientException(SESSION_CLOSED);
-            TypeDBTransaction.Extended transactionRPC = new TypeDBTransactionImpl(this, sessionID, type, options);
-            transactions.add(transactionRPC);
-            return transactionRPC;
-        } finally {
-            accessLock.readLock().unlock();
-        }
-    }
+int networkLatencyMillis() {
+    return networkLatencyMillis;
+}
 
-    ByteString id() {
-        return sessionID;
-    }
-
-    TypeDBStub stub() {
-        return client.stub();
-    }
-
-    RequestTransmitter transmitter() {
-        return client.transmitter();
-    }
-
-    int networkLatencyMillis() {
-        return networkLatencyMillis;
-    }
-
-    @Override
-    public void close() {
-        try {
-            accessLock.writeLock().lock();
-            if (isOpen.compareAndSet(true, false)) {
-                transactions.forEach(TypeDBTransaction.Extended::close);
-                client.removeSession(this);
-                pulse.cancel();
-                try {
-                    stub().sessionClose(closeReq(sessionID));
-                } catch (TypeDBClientException e) {
-                    // Most likely the session is already closed or the server is no longer running.
-                }
-            }
-        } finally {
-            accessLock.writeLock().unlock();
-        }
-    }
-
-    private class PulseTask extends TimerTask {
-
-        @Override
-        public void run() {
-            if (!isOpen()) return;
-            boolean alive;
+@Override
+public void close() {
+    try {
+        accessLock.writeLock().lock();
+        if (isOpen.compareAndSet(true, false)) {
+            transactions.forEach(TypeDBTransaction.Extended::close);
+            client.removeSession(this);
+            pulse.cancel();
             try {
-                alive = stub().sessionPulse(pulseReq(sessionID)).getAlive();
-            } catch (TypeDBClientException exception) {
-                alive = false;
-            }
-            if (!alive) {
-                isOpen.set(false);
-                pulse.cancel();
+                stub().sessionClose(closeReq(sessionID));
+            } catch (TypeDBClientException e) {
+                // Most likely the session is already closed or the server is no longer running.
             }
         }
+    } finally {
+        accessLock.writeLock().unlock();
     }
-    */
+}
+
+private class PulseTask extends TimerTask {
+
+    @Override
+    public void run() {
+        if (!isOpen()) return;
+        boolean alive;
+        try {
+            alive = stub().sessionPulse(pulseReq(sessionID)).getAlive();
+        } catch (TypeDBClientException exception) {
+            alive = false;
+        }
+        if (!alive) {
+            isOpen.set(false);
+            pulse.cancel();
+        }
+    }
+}
+*/
 }

@@ -35,7 +35,8 @@ import io.grpc.stub.StreamObserver;
 
 import java.util.function.Supplier;
 */
-use TypeDb\Client\Common\RPC\TypeDBStub;
+
+use Typedb\Protocol\TypeDbClient;
 
 use Typedb\Protocol\CoreDatabaseManager\Create\Req as CreateReq;
 use Typedb\Protocol\CoreDatabaseManager\Create\Res as CreateRes;
@@ -43,49 +44,68 @@ use Typedb\Protocol\CoreDatabaseManager\Contains\Req as ContainsReq;
 use Typedb\Protocol\CoreDatabaseManager\Contains\Res as ContainsRes;
 use Typedb\Protocol\CoreDatabaseManager\All\Req as AllReq;
 use Typedb\Protocol\CoreDatabaseManager\All\Res as AllRes;
+use \Typedb\Protocol\CoreDatabase\Schema\Req as SchemaReq;
+use \Typedb\Protocol\CoreDatabase\Schema\Res as SchemaRes;
+use \Typedb\Protocol\CoreDatabase\Delete\Req as DeleteReq;
+use \Typedb\Protocol\CoreDatabase\Delete\Res as DeleteRes;
+use \Typedb\Protocol\Session\Open\Req as SessionOpenReq;
+use \Typedb\Protocol\Session\Open\Res as SessionOpenRes;
+use \Typedb\Protocol\Session\Close\Req as SessionCloseReq;
+use \Typedb\Protocol\Session\Close\Res as SessionCloseRes;
+use \Typedb\Protocol\Session\Pulse\Req as SessionPulseReq;
+use \Typedb\Protocol\Session\Pulse\Res as SessionPulseRes;
 
 
-class TypeDBStub {
+abstract class TypeDBStub
+{
 
-    public function databasesContains(ContainsReq $request) : ContainsRes {
-        return $this->blockingStub()->databases_contains($request);
+    public function databasesContains(ContainsReq $request)
+    {
+        return $this->blockingStub()->databases_contains($request)->wait();
     }
 
-    public function databasesCreate(CreateReq $request) : CreateRes{
+    public function databasesCreate(CreateReq $request)
+    {
         return $this->blockingStub()->databases_create($request);
     }
 
-    public function databasesAll(AllReq $request) : AllRes{
-        return $this->blockingStub()->databases_zll($request);
+    public function databasesAll(AllReq $request)
+    {
+        return $this->blockingStub()->databases_all($request);
     }
 
-    public function databaseSchema(SchemaReq $request) : SchemaRes{
+    public function databaseSchema(SchemaReq $request)
+    {
         return $this->blockingStub()->database_schema($request);
     }
 
-    public function databaseDelete(DeleteReq $request) : DeleteRes{
-        return $this->blockingStub()->database_delete($request));
+    public function databaseDelete(DeleteReq $request)
+    {
+        return $this->blockingStub()->database_delete($request);
     }
 
-    public function sessionOpen(Open.Req $request) : SessionProto.Session.Open.Res{
-        return $this->blockingStub()->session_open($request));
+    public function sessionOpen(SessionOpenReq $request)
+    {
+        return $this->blockingStub()->session_open($request);
     }
 
-    public function sessionClose(SessionProto.Session.Close.Req $request) : SessionProto.Session.Close.Res{
-        return $this->blockingStub()->session_close($request));
+    public function sessionClose(SessionCloseReq $request)
+    {
+        return $this->blockingStub()->session_close($request);
     }
 
-    public function sessionPulse(SessionProto.Session.Pulse.Req $request) : SessionProto.Session.Pulse.Res{
-        return $this->blockingStub()->session_pulse($request));
+    public function sessionPulse(SessionPulseReq $request)
+    {
+        return $this->blockingStub()->session_pulse($request);
     }
 
-    public function transaction(StreamObserver<TransactionProto.Transaction.Server> responseObserver) : StreamObserver<TransactionProto.Transaction.Client>{
-        return $this->asyncStub()->transaction(responseObserver));
+    public function transaction() {
+        return $this->asyncStub()->transaction();
     }
 
-    protected function  blockingStub(): TypeDBStub;
+    protected abstract function blockingStub(): TypeDbClient;
 
-    protected function asyncStub():TypeDBStub;
+    protected abstract function asyncStub(): TypeDbClient;
 
     /*
     protected abstract ManagedChannel channel();

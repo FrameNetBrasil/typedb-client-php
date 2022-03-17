@@ -30,11 +30,48 @@ import static com.vaticle.typedb.client.common.rpc.RequestBuilder.Core.Database.
 import static com.vaticle.typedb.client.common.rpc.RequestBuilder.Core.Database.schemaReq;
 import static com.vaticle.typedb.client.connection.TypeDBDatabaseManagerImpl.nonNull;
 */
+
 namespace TypeDb\Client\Connection;
 
 use TypeDb\Client\Api\Database\Database;
+use TypeDb\Client\Common\RPC\TypeDBStub;
 
-class TypeDBDatabaseImpl implements Database {
+class TypeDBDatabaseImpl implements Database
+{
+
+    private string $name;
+    private TypeDBDatabaseManagerImpl $databaseMgr;
+
+    public function __construct(TypeDBDatabaseManagerImpl $databaseMgr, string $name)
+    {
+        $this->databaseMgr = $databaseMgr;
+        $this->name = $this->nonNull(($name));
+    }
+
+    private function stub(): TypeDBStub
+    {
+        return $this->databaseMgr->stub();
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function schema(): string
+    {
+        return $this->stub()->databaseSchema(schemaReq(name)) . getSchema();
+    }
+
+    public function delete(): void
+    {
+        $this->stub()->databaseDelete(deleteReq(name));
+    }
+
+    public function toString(): string
+    {
+        return $this->name;
+    }
 
     /*
     private final String name;

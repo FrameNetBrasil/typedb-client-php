@@ -28,16 +28,18 @@ import com.vaticle.typedb.client.connection.TypeDBClientImpl;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.NettyChannelBuilder;
 */
+
 namespace TypeDb\Client\Connection\Core;
 
 use TypeDb\Client\Connection\TypeDBClientImpl;
-use Typedb\Protocol\TypeDBClient;
 
-class CoreClient extends TypeDBClientImpl {
+class CoreClient extends TypeDBClientImpl
+{
 
-    private TypeDBClient $stub;
+    private CoreStub $stub;
 
-    public function __construct(string $address, int $parallelisation = null) {
+    public function __construct(string $address, int $parallelisation = null)
+    {
         if (is_null($parallelisation)) {
             $parallelisation = $this->calculateParallelisation();
         }
@@ -45,38 +47,37 @@ class CoreClient extends TypeDBClientImpl {
 //        $channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
 //        stub = CoreStub.create(channel);
 //        validateConnectionOrThrow();
-        $this->stub = new TypeDBClient($address, [
-            'credentials' => Grpc\ChannelCredentials::createInsecure(),
-        ]);
+        $this->stub = CoreStub::create($address);
     }
 
 
-/*
-private final ManagedChannel channel;
-private final TypeDBStub stub;
+    /*
+    private final ManagedChannel channel;
+    private final TypeDBStub stub;
 
-public CoreClient(String address) {
-    this(address, calculateParallelisation());
-}
+    public CoreClient(String address) {
+        this(address, calculateParallelisation());
+    }
 
-public CoreClient(String address, int parallelisation) {
-    super(parallelisation);
-    channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
-    stub = CoreStub.create(channel);
-    validateConnectionOrThrow();
-}
+    public CoreClient(String address, int parallelisation) {
+        super(parallelisation);
+        channel = NettyChannelBuilder.forTarget(address).usePlaintext().build();
+        stub = CoreStub.create(channel);
+        validateConnectionOrThrow();
+    }
 
-@Override
-public ManagedChannel channel() {
-    return channel;
-}
+    @Override
+    public ManagedChannel channel() {
+        return channel;
+    }
 
-@Override
-public TypeDBStub stub() {
-    return stub;
-}
-*/
-    public function stub(): TypeDbClient {
+    @Override
+    public TypeDBStub stub() {
+        return stub;
+    }
+    */
+    public function stub(): CoreStub
+    {
         return $this->stub;
     }
 }

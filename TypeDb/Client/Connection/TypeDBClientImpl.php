@@ -22,8 +22,11 @@
 
 namespace TypeDb\Client\Connection;
 use TypeDb\Client\Api\TypeDBClient;
-use TypeDb\Client\Common\RPC\ManagedChannel;
+//use TypeDb\Client\Common\RPC\ManagedChannel;
+use TypeDb\Client\Api\TypeDBCluster;
+use TypeDb\Client\Connection\Core\CoreStub;
 use TypeDb\Client\Stream\RequestTransmitter;
+use Typedb\Protocol\TypeDBClient as TypeDBClientProto;
 
 /*
 package com.vaticle.typedb.client.connection;
@@ -46,7 +49,7 @@ import static com.vaticle.typedb.client.common.exception.ErrorMessage.Internal.I
 import static com.vaticle.typedb.common.util.Objects.className;
 */
 
-class TypeDBClientImpl implements TypeDBClient {
+abstract class TypeDBClientImpl implements TypeDBClient {
 
     private static string $TYPEDB_CLIENT_RPC_THREAD_NAME = "typedb-client-rpc";
 
@@ -65,6 +68,7 @@ class TypeDBClientImpl implements TypeDBClient {
     }
 
     public function calculateParallelisation(): int {
+        return 1;
 //        int cores = Runtime.getRuntime().availableProcessors();
 //        if (cores <= 4) return 2;
 //        else if (cores <= 9) return 3;
@@ -77,7 +81,7 @@ class TypeDBClientImpl implements TypeDBClient {
             // TODO: This is hacky patch. We know that databaseMgr.all() will throw an exception if connection has not been
             //       established. But we should replace this code to perform the check in a more meaningful way. This method
             //       should naturally be replaced once we implement a new client pulse architecture.
-            $this->databaseMgr.all();
+//            $this->databaseMgr.all();
         } catch (\Exception $e){
             $this->close();
             throw $e;
@@ -88,12 +92,12 @@ class TypeDBClientImpl implements TypeDBClient {
         return !$this->channel().isShutdown();
     }
 
-    public function TypeDBSessionImpl session(String database, TypeDBSession.Type type): TypeDBSessionImpl  {
-        return $this->session(database, type, TypeDBOptions.core());
-    }
+//    public function TypeDBSessionImpl session(String database, TypeDBSession.Type type): TypeDBSessionImpl  {
+//        return $this->session(database, type, TypeDBOptions.core());
+//    }
 
-    public function  session(String database, TypeDBSession.Type type, TypeDBOptions options): TypeDBSessionImpl  {
-       $session = new TypeDBSessionImpl(this, database, type, options);
+    public function  session(string $database, /*TypeDBSession.Type*/ $type, /*TypeDBOptions*/ $options): TypeDBSessionImpl  {
+//       $session = new TypeDBSessionImpl(this, database, type, options);
 //        assert !sessions.containsKey(session.id());
 //        sessions.put(session.id(), session);
 //        return session;
@@ -107,30 +111,30 @@ class TypeDBClientImpl implements TypeDBClient {
         return false;
     }
 
-    public function  asCluster(): Cluster  {
-        throw new TypeDBClientException(ILLEGAL_CAST, className(TypeDBClient.Cluster.class));
+    public function  asCluster(): TypeDBCluster {
+//        throw new TypeDBClientException(ILLEGAL_CAST, className(TypeDBClient.Cluster.class));
     }
 
-    abstract public function channel(): ManagedChannel ;
+//    abstract public function channel(): ManagedChannel ;
 
-    abstract public function stub():TypeDBStub ;
+    abstract public function stub():CoreStub;
 
     public function transmitter(): RequestTransmitter  {
         return $this->transmitter;
     }
 
-    public function removeSession(TypeDBSessionImpl session): void {
-        $this->sessions.remove(session.id());
+    public function removeSession(TypeDBSessionImpl $session): void {
+//        $this->sessions.remove(session.id());
     }
 
     public function close(): void {
-        try {
+   //     try {
 //            sessions.values().forEach(TypeDBSessionImpl::close);
 //            channel().shutdown().awaitTermination(10, TimeUnit.SECONDS);
 //            transmitter.close();
-        } catch (InterruptedException e) {
+     //   } catch (InterruptedException $e) {
 //            Thread.currentThread().interrupt();
-        }
+       // }
     }
 
 }

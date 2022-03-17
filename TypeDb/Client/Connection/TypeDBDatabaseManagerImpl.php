@@ -45,6 +45,7 @@ use TypeDb\Client\Api\Database\Database;
 use TypeDb\Client\Common\Exception\ErrorMessage;
 use TypeDb\Client\Common\Exception\TypeDBClientException;
 use TypeDb\Client\Common\RPC\RequestBuilder\Core\DatabaseManager as RBDatabaseManager;
+use TypeDb\Client\Connection\Core\CoreStub;
 use Typedb\Protocol\TypeDBClient;
 
 class TypeDBDatabaseManagerImpl implements DatabaseManager {
@@ -63,19 +64,20 @@ class TypeDBDatabaseManagerImpl implements DatabaseManager {
     }
 
     public function contains(string $name):bool {
-        return $this->stub()->databases_contains(RBDatabaseManager::containsReq($this->nonNull($name)))->getContains();
+        return $this->stub()->databasesContains(RBDatabaseManager::containsReq($this->nonNull($name)))->getContains();
     }
 
     public function create(string $name): void {
-        //$this->client->databasesCreate(createReq(nonNull(name)));
+        $this->stub()->databasesCreate(RBDatabaseManager::createReq($this->nonNull($name)));
     }
 
     public function all(): array {
-        //$databases = $this->client->databasesAll(allReq()).getNamesList();
+        $databases = $this->stub()->databasesAll(RBDatabaseManager::allReq())->getNamesList();
         //return $databases->stream()->map(name -> new TypeDBDatabaseImpl(this, name)).collect(toList());
+        return $databases;
     }
 
-    publoic function stub(): TypeDbClient {
+    public function stub(): CoreStub {
         return $this->client->stub();
     }
 
