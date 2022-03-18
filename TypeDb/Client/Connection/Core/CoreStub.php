@@ -29,6 +29,7 @@ import io.grpc.ManagedChannel;
 */
 namespace TypeDb\Client\Connection\Core;
 
+use Grpc\Channel;
 use Grpc\ChannelCredentials;
 use TypeDb\Client\Common\RPC\TypeDBStub;
 use Typedb\Protocol\TypeDBClient;
@@ -36,11 +37,18 @@ use Typedb\Protocol\TypeDBClient;
 class CoreStub extends TypeDBStub {
 
     private TypeDbClient $stub;
+    private Channel $channel;
 
     public function __construct(string $address) {
-        $this->stub = new TypeDBClient($address, [
+        $opts = [
             'credentials' => ChannelCredentials::createInsecure(),
-        ]);
+        ];
+        $this->channel = TypeDBClient::getDefaultChannel($address, $opts);
+        $this->stub = new TypeDBClient($address, $opts, $this->channel);
+    }
+
+    public function channel(): Channel {
+        return $this->channel;
     }
 
     protected function blockingStub(): TypeDbClient {
@@ -48,6 +56,10 @@ class CoreStub extends TypeDBStub {
     }
 
     protected function asyncStub(): TypeDbClient {
+        return $this->stub;
+    }
+
+    protected function stub(): TypeDbClient {
         return $this->stub;
     }
 

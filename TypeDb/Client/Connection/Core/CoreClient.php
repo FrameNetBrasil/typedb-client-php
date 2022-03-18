@@ -31,12 +31,15 @@ import io.grpc.netty.NettyChannelBuilder;
 
 namespace TypeDb\Client\Connection\Core;
 
+use Grpc\Channel;
 use TypeDb\Client\Connection\TypeDBClientImpl;
+use Typedb\Protocol\TypeDBClient;
 
 class CoreClient extends TypeDBClientImpl
 {
 
     private CoreStub $stub;
+    private Channel $channel;
 
     public function __construct(string $address, int $parallelisation = null)
     {
@@ -48,6 +51,7 @@ class CoreClient extends TypeDBClientImpl
 //        stub = CoreStub.create(channel);
 //        validateConnectionOrThrow();
         $this->stub = CoreStub::create($address);
+        $this->channel = $this->stub->channel();
     }
 
 
@@ -76,6 +80,10 @@ class CoreClient extends TypeDBClientImpl
         return stub;
     }
     */
+    public function channel(): Channel {
+        return $this->channel;
+    }
+
     public function stub(): CoreStub
     {
         return $this->stub;

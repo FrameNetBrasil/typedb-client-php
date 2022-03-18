@@ -50,7 +50,7 @@ namespace TypeDb\Client\Connection;
 
 use Behat\Testwork\Counter\Timer;
 use Symfony\Component\String\ByteString;
-use TypeDb\Client\Api\TypeDbSessionType as Type;
+use TypeDb\Client\Api\TypeDbSessionType;
 use TypeDb\Client\Api\TypeDBOptions;
 use TypeDb\Client\Api\TypeDBSession;
 use TypeDb\Client\Api\TypeDBTransaction;
@@ -66,14 +66,14 @@ class TypeDBSessionImpl implements TypeDBSession {
     private TypeDBDatabaseImpl $database;
     private ByteString $sessionID;
     private array $transactions;
-    private Type $type;
+    private TypeDbSessionType $type;
     private TypeDBOptions $options;
     private Timer $pulse;
 //    private ReadWriteLock $accessLock;
 //    private AtomicBoolean $isOpen;
     private int $networkLatencyMillis;
 
-    public function __construct(TypeDBClientImpl $client, string $database, Type $type, TypeDBOptions $options) {
+    public function __construct(TypeDBClientImpl $client, string $database, TypeDbSessionType $type, TypeDBOptions $options) {
         $this->client = $client;
         $this->type = $type;
         $this->options = $options;
@@ -96,7 +96,7 @@ class TypeDBSessionImpl implements TypeDBSession {
     return $this->isOpen->get();
 }
 
-public function type(): Type {
+public function type(): TypeDbSessionType {
     return $this->type;
 }
 

@@ -36,6 +36,9 @@ import io.grpc.stub.StreamObserver;
 import java.util.function.Supplier;
 */
 
+use RuntimeException;
+use TypeDb\Client\Common\Exception\StatusRuntimeException;
+use TypeDb\Client\Common\Exception\TypeDBClientException;
 use Typedb\Protocol\TypeDbClient;
 
 use Typedb\Protocol\CoreDatabaseManager\Create\Req as CreateReq;
@@ -66,7 +69,7 @@ abstract class TypeDBStub
 
     public function databasesCreate(CreateReq $request)
     {
-        return $this->blockingStub()->databases_create($request);
+        return $this->resilientCall(fn() => $this->blockingStub()->databases_create($request)->wait());
     }
 
     public function databasesAll(AllReq $request)
@@ -107,31 +110,61 @@ abstract class TypeDBStub
 
     protected abstract function asyncStub(): TypeDbClient;
 
-    /*
-    protected abstract ManagedChannel channel();
-
-    protected abstract TypeDBGrpc.TypeDBBlockingStub blockingStub();
-
-    protected abstract TypeDBGrpc.TypeDBStub asyncStub();
-
-    protected <RES> RES resilientCall(Supplier<RES> function) {
+    protected function resilientCall($function) {
         try {
-            ensureConnected();
-            return function.get();
-        } catch (StatusRuntimeException e) {
-            throw TypeDBClientException.of(e);
+            $this->ensureConnected();
+            list($result, $status) = $function();
+            print_r($result);
+            print_r("\n======\n");
+            print_r($status);
+            StatusRuntimeException::of($status);
+            return $result;
+        } catch (RuntimeException $e) {
+            throw new TypeDBClientException($e->getMessage());
         }
     }
 
-    private void ensureConnected() {
+
+    private function ensureConnected(): void {
         // The Channel is a persistent HTTP connection. If it gets interrupted (say, by the server going down) then
         // gRPC's recovery logic will kick in, marking the Channel as being in a transient failure state and rejecting
         // all RPC calls while in this state. It will attempt to reconnect periodically in the background, using an
         // exponential backoff algorithm. Here, we ensure that when the user needs that connection urgently (e.g: to
         // open a TypeDB session), it tries to reconnect immediately instead of just failing without trying.
-        if (channel().getState(true).equals(ConnectivityState.TRANSIENT_FAILURE)) {
-            channel().resetConnectBackoff();
-        }
+        $state = $this->stub()->getConnectivityState();
+        print_r("state \n");
+        print_r($state);
+//        if (channel().getState(true).equals(ConnectivityState.TRANSIENT_FAILURE)) {
+//            channel().resetConnectBackoff();
+//        }
+}
+
+
+/*
+protected abstract ManagedChannel channel();
+
+protected abstract TypeDBGrpc.TypeDBBlockingStub blockingStub();
+
+protected abstract TypeDBGrpc.TypeDBStub asyncStub();
+
+protected <RES> RES resilientCall(Supplier<RES> function) {
+    try {
+        ensureConnected();
+        return function.get();
+    } catch (StatusRuntimeException e) {
+        throw TypeDBClientException.of(e);
     }
-    */
+}
+
+private void ensureConnected() {
+    // The Channel is a persistent HTTP connection. If it gets interrupted (say, by the server going down) then
+    // gRPC's recovery logic will kick in, marking the Channel as being in a transient failure state and rejecting
+    // all RPC calls while in this state. It will attempt to reconnect periodically in the background, using an
+    // exponential backoff algorithm. Here, we ensure that when the user needs that connection urgently (e.g: to
+    // open a TypeDB session), it tries to reconnect immediately instead of just failing without trying.
+    if (channel().getState(true).equals(ConnectivityState.TRANSIENT_FAILURE)) {
+        channel().resetConnectBackoff();
+    }
+}
+*/
 }

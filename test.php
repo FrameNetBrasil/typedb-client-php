@@ -5,13 +5,20 @@ require 'vendor/autoload.php';
 use TypeDb\Client\Connection\Core\CoreClient;
 
 
-function typeDBClientTest() {
+function typeDBClientTest()
+{
     try {
-        $client = new CoreClient("127.0.0.1:1729");
-        print_r("a\n");
+        $client = new CoreClient("192.168.0.172:1729");
         $client->databases()->create("typedb");
-        print_r("b\n");
-    } catch(Exception $e) {
+        // client is open
+        $session = $client->session("typedb", TypeDBSessionType . DATA);
+        // session is open
+        $session->close();
+        // session is closed
+        $client->close();
+        // client is closed
+    } catch (Exception $e) {
+        print_r("\n*** Error \n");
         echo $e->getMessage();
     }
 }

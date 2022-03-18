@@ -21,12 +21,16 @@
  */
 
 namespace TypeDb\Client\Connection;
+use PHPUnit\Framework\Assert;
 use TypeDb\Client\Api\TypeDBClient;
 //use TypeDb\Client\Common\RPC\ManagedChannel;
 use TypeDb\Client\Api\TypeDBCluster;
+use TypeDb\Client\Api\TypeDBOptions;
+use TypeDb\Client\Api\TypeDBSessionType;
 use TypeDb\Client\Connection\Core\CoreStub;
 use TypeDb\Client\Stream\RequestTransmitter;
 use Typedb\Protocol\TypeDBClient as TypeDBClientProto;
+use Ds\Map;
 
 /*
 package com.vaticle.typedb.client.connection;
@@ -56,7 +60,7 @@ abstract class TypeDBClientImpl implements TypeDBClient {
     private RequestTransmitter $transmitter;
     private TypeDBDatabaseManagerImpl $databaseMgr;
 //    private final ConcurrentMap<ByteString, TypeDBSessionImpl> sessions;
-    private array $sessions;
+    private Map $sessions;
 
     public function __construct(int $parallelisation) {
 //        NamedThreadFactory threadFactory = NamedThreadFactory.create(TYPEDB_CLIENT_RPC_THREAD_NAME);
@@ -64,7 +68,7 @@ abstract class TypeDBClientImpl implements TypeDBClient {
 //        databaseMgr = new TypeDBDatabaseManagerImpl(this);
 //        sessions = new ConcurrentHashMap<>();
         $this->databaseMgr = new TypeDBDatabaseManagerImpl($this);
-        $this->sessions = [];
+        $this->sessions = new Map();
     }
 
     public function calculateParallelisation(): int {
@@ -96,11 +100,12 @@ abstract class TypeDBClientImpl implements TypeDBClient {
 //        return $this->session(database, type, TypeDBOptions.core());
 //    }
 
-    public function  session(string $database, /*TypeDBSession.Type*/ $type, /*TypeDBOptions*/ $options): TypeDBSessionImpl  {
-//       $session = new TypeDBSessionImpl(this, database, type, options);
-//        assert !sessions.containsKey(session.id());
-//        sessions.put(session.id(), session);
-//        return session;
+    public function  session(string $database, TypeDBSessionType $type, ?TypeDBOptions $options): TypeDBSessionImpl  {
+       $session = new TypeDBSessionImpl($this, $database, $type, $options);
+       if (!$this->sessions->hasKey($session->id())) {
+            $this->sessions->put($session->id(), $session);
+       }
+       return $session;
     }
 
     public function  databases() : TypeDBDatabaseManagerImpl {

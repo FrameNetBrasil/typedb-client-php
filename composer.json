@@ -4,7 +4,9 @@
   "require": {
     "grpc/grpc": "^v1.39.0",
     "google/protobuf": "^v3.12.2",
-    "ext-grpc": "*"
+    "ext-ds": "*",
+    "ext-grpc": "*",
+    "php-ds/php-ds": "^1.4"
   },
   "autoload": {
     "psr-4": {
@@ -14,6 +16,7 @@
     }
   },
   "require-dev": {
-    "behat/behat": "^3.0"
+    "behat/behat": "^3.0",
+    "phpunit/phpunit": "^9.5"
   }
 }

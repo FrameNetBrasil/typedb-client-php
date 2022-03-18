@@ -32,12 +32,12 @@ import javax.annotation.Nullable;
 
 use RuntimeException;
 
-class TypeDBClientException extends RuntimeException {
+class TypeDBClientException extends RuntimeException implements \Throwable {
 
 
-    public function __construct(string $error, ...$parameters) {
+    public function __construct(string $error) {
            $this->errorMessage = null;
-           throw $parameters[0]($error);
+           parent::__construct($error);
     }
 
     /*
